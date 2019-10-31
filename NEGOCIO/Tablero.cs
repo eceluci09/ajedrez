@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -7,11 +8,15 @@ namespace NEGOCIO
 {
     public class Tablero
     {
+        public Tablero()
+        {
+            this.Iniciar();
+        }
         private static string ARRIBA = "ARRIBA";
         private static string ABAJO = "ABAJO";
 
 
-        private List<Pieza> piezas;
+        private List<Pieza> piezas = new List<Pieza>();
 
         public List<Pieza> Piezas
         {
@@ -19,7 +24,7 @@ namespace NEGOCIO
             set { piezas = value; }
         }
 
-        private List<Celda> celdas;
+        private List<Celda> celdas = new List<Celda>();
 
         public List<Celda> Celdas
         {
@@ -35,6 +40,129 @@ namespace NEGOCIO
             set { partida = value; }
         }
 
+        public void Iniciar()
+        {
+            CrearCeldas();
+            CrearPiezas();
+        }
+
+        private void CrearPiezas()
+        {
+            //Blancas
+
+            Torre torre1B = new Torre(ABAJO, true, Color.White);
+            getCelda(1, 1).Pieza = torre1B;
+
+            piezas.Add(torre1B);
+
+            Caballo caballo1B = new Caballo(ABAJO, true, Color.White);
+            getCelda(1, 2).Pieza = caballo1B;
+
+            piezas.Add(caballo1B);
+
+            Alfil alfil1B = new Alfil(ABAJO, true, Color.White);
+            getCelda(1, 3).Pieza = alfil1B;
+
+            piezas.Add(alfil1B);
+
+            Reina reinaB = new Reina(ABAJO, true, Color.White);
+            getCelda(1, 4).Pieza = reinaB;
+
+            piezas.Add(reinaB);
+
+            Rey reyB = new Rey(ABAJO, true, Color.White);
+            getCelda(1, 5).Pieza = reyB;
+
+            piezas.Add(reyB);
+
+            Alfil alfil2B = new Alfil(ABAJO, true, Color.White);
+            getCelda(1, 6).Pieza = alfil2B;
+
+            piezas.Add(alfil2B);
+
+            Caballo caballo2B = new Caballo(ABAJO, true, Color.White);
+            getCelda(1, 7).Pieza = caballo2B;
+
+            piezas.Add(caballo2B);
+
+            Torre torre2B = new Torre(ABAJO, true, Color.White);
+            getCelda(1, 8).Pieza = torre2B;
+
+            piezas.Add(torre2B);
+
+            for (int i = 0; i < 8; i++)
+            {
+                Peon peon = new Peon(ABAJO, true, Color.White);
+                getCelda(2, i + 1).Pieza = peon;
+                piezas.Add(peon);
+            }
+
+            //Negras
+
+            Torre torre1N = new Torre(ARRIBA, true, Color.Black);
+            getCelda(8, 1).Pieza = torre1N;
+
+            piezas.Add(torre1N);
+
+            Caballo caballo1N = new Caballo(ARRIBA, true, Color.Black);
+            getCelda(8, 2).Pieza = caballo1N;
+
+            piezas.Add(caballo1N);
+
+            Alfil alfil1N = new Alfil(ARRIBA, true, Color.Black);
+            getCelda(8, 3).Pieza = alfil1N;
+
+            piezas.Add(alfil1N);
+
+            Reina reinaN = new Reina(ARRIBA, true, Color.Black);
+            getCelda(8, 4).Pieza = reinaN;
+
+            piezas.Add(reinaN);
+
+            Rey reyN = new Rey(ARRIBA, true, Color.Black);
+            getCelda(8, 5).Pieza = reyN;
+
+            piezas.Add(reyN);
+
+            Alfil alfil2N = new Alfil(ARRIBA, true, Color.Black);
+            getCelda(8, 6).Pieza = alfil2N;
+
+            piezas.Add(alfil2N);
+
+            Caballo caballo2N = new Caballo(ARRIBA, true, Color.Black);
+            getCelda(8, 7).Pieza = caballo2N;
+
+            piezas.Add(caballo2N);
+
+            Torre torre2N = new Torre(ARRIBA, true, Color.Black);
+            getCelda(8, 8).Pieza = torre2N;
+
+            piezas.Add(torre2N);
+
+            for (int i = 0; i < 8; i++)
+            {
+                Peon peon = new Peon(ARRIBA, true, Color.Black);
+                getCelda(7, i + 1).Pieza = peon;
+                piezas.Add(peon);
+            }
+
+
+        }
+
+        private void CrearCeldas()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    Celda celda = new Celda();
+                    celda.Color = (i + j) % 2 == 0 ? Color.FromArgb(145, 29, 19) : Color.FromArgb(233, 255, 95);
+                    celda.Fila = i + 1;
+                    celda.Columna = j + 1;
+                    celdas.Add(celda);
+                }
+            }
+        }
 
         public Celda getCelda(Pieza pieza)
         {
@@ -44,6 +172,16 @@ namespace NEGOCIO
 
 
            return celda;
+        }
+
+        public Celda getCelda(int fila, int columna)
+        {
+            Celda celda = (from Celda cel in celdas
+                           where cel.Fila == fila && cel.Columna == columna
+                           select cel).FirstOrDefault();
+
+
+            return celda;
         }
 
         public Celda getCelda(Celda celdaActual, Movimiento movimiento)
@@ -68,7 +206,7 @@ namespace NEGOCIO
             return (celda.Pieza == null);
         }
 
-        public bool VerificarCeldaDisponible(Celda celda, string color)
+        public bool VerificarCeldaDisponible(Celda celda, Color color)
         {
             if (celda == null) return false;
 

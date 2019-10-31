@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -8,6 +9,13 @@ namespace NEGOCIO
     public class Caballo : Pieza, IMOVIMIENTOFIJO
     {
         private List<Movimiento> movimientos;
+
+        public Caballo(string posicionInicial, bool activa, Color color) : base(posicionInicial, activa, color)
+        {
+            this.posicionInicial = posicionInicial;
+            this.activa = activa;
+            this.color = color;
+        }
 
         public List<Movimiento> Movimientos
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -7,6 +8,13 @@ namespace NEGOCIO
 {
     public class Torre : Pieza
     {
+        public Torre(string posicionInicial, bool activa, Color color) : base(posicionInicial, activa, color)
+        {
+            this.posicionInicial = posicionInicial;
+            this.activa = activa;
+            this.color = color;
+        }
+
         public override List<Celda> getCeldasDestino(Tablero tablero, Celda celdaActual)
         {
             Celda celda = this.VerificarSiPuedeEnrocar(tablero);

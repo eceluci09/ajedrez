@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -7,9 +8,16 @@ namespace NEGOCIO
 {
     public abstract class Pieza
     {
-        protected string color;
+        public Pieza(string posicionInicial, bool activa, Color color)
+        {
+            this.posicionInicial = posicionInicial;
+            this.activa = activa;
+            this.color = color;
+        }
 
-        public string Color
+        protected Color color;
+
+        public Color Color
         {
             get { return color; }
             set { color = value; }
@@ -32,7 +40,7 @@ namespace NEGOCIO
         }
 
 
-        private string posicionInicial;
+        protected string posicionInicial;
 
         public string PosicionInicial
         {
@@ -40,7 +48,7 @@ namespace NEGOCIO
             set { posicionInicial = value; }
         }
 
-        private bool activa;
+        protected bool activa;
 
         public bool Activa
         {
