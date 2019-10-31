@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data;
+using System.Data.SqlClient;
+using ACCESOADATOS;
 
 namespace NEGOCIO
 {
     public class Partida
     {
+        Acceso acceso = new Acceso();
+
         private List<Turno> turnos = new List<Turno>();
 
         public List<Turno> Turnos
@@ -154,7 +159,24 @@ namespace NEGOCIO
             }
         }
 
-       
+        public int Alta()
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@idJugador1", jugador1.Id));
+            parametros.Add(acceso.CrearParametro("@idJugador2", jugador2.Id));
+            if (ganador != null)
+            {
+                parametros.Add(acceso.CrearParametro("@idJugador2", jugador2.Id));
+            } else
+            {
+                parametros.Add(acceso.CrearParametro("@idGanador", null));
+            }
 
+            parametros.Add(acceso.CrearParametro("@tablas", this.tablas == true ? 1 : 0));
+            parametros.Add(acceso.CrearParametro("@fecha", DateTime.Now));
+
+            return acceso.Escribir("CREAR_PARTIDA", parametros);
+                                 
+        }
     }
 }

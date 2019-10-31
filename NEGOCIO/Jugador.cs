@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using ACCESOADATOS;
 
 namespace NEGOCIO
 {
     public class Jugador
     {
+        Acceso acceso = new Acceso();
+        private int id;
+
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
         private List<Pieza> piezas;
 
         public List<Pieza> Piezas
@@ -139,7 +150,23 @@ namespace NEGOCIO
             tablero.FinalizarPorTablas();
         }
 
-       
+       public int Alta()
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@nombre", this.nombre));
+            parametros.Add(acceso.CrearParametro("@apellido", this.apellido));
+            parametros.Add(acceso.CrearParametro("@apellido", this.apellido));
+
+            return acceso.Escribir("CREAR_JUGADOR", parametros);
+        }
+
+        public int ActualizarPartidasGanadas()
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@idJugador", this.id));
+
+            return acceso.Escribir("ACTUALIZAR_PARTIDAS_GANADAS", parametros);
+        }
 
 
 

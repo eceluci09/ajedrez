@@ -44,7 +44,6 @@
     <Compile Include="Alfil.cs" />
     <Compile Include="Caballo.cs" />
     <Compile Include="Celda.cs" />
-    <Compile Include="IABM.cs" />
     <Compile Include="IMOVIMIENTOFIJO.cs" />
     <Compile Include="Jugador.cs" />
     <Compile Include="Movimiento.cs" />
@@ -60,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ACCESOADATOS\ACCESOADATOS.csproj">
+      <Project>{051c8c82-19bd-4c80-921c-c320192ac3ef}</Project>
+      <Name>ACCESOADATOS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
