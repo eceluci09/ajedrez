@@ -44,6 +44,7 @@
     <Compile Include="Alfil.cs" />
     <Compile Include="Caballo.cs" />
     <Compile Include="Celda.cs" />
+    <Compile Include="Credencial.cs" />
     <Compile Include="IMOVIMIENTOFIJO.cs" />
     <Compile Include="Jugador.cs" />
     <Compile Include="Movimiento.cs" />

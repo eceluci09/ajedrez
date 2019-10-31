@@ -44,6 +44,7 @@ namespace ACCESOADATOS
 
         public DataTable Leer(string nombre, List<SqlParameter> parametros)
         {
+            Abrir();
             SqlDataAdapter adaptador = new SqlDataAdapter();
             adaptador.SelectCommand = CrearComando(nombre, parametros);
 
@@ -52,11 +53,13 @@ namespace ACCESOADATOS
             adaptador.Fill(tabla);
 
             adaptador = null;
+            Cerrar();
             return tabla;
         }
 
         public int Escribir(string nombre, List<SqlParameter> parametros)
         {
+            Abrir();
             SqlCommand comando = CrearComando(nombre, parametros);
             int filas = 0;
 
@@ -65,8 +68,26 @@ namespace ACCESOADATOS
                 filas = comando.ExecuteNonQuery();
             }
             catch { filas = -1; }
-
+            Cerrar();
             return filas;
+        }
+
+        public bool Validar(string nombre, List<SqlParameter> parametros)
+        {
+            Abrir();
+            SqlCommand comando = CrearComando(nombre, parametros);
+            bool existe = false;
+
+            try
+            {
+                existe = int.Parse(comando.ExecuteScalar().ToString()) == 1;
+            }
+            catch(Exception ex)
+            {
+                existe = false;
+            }
+            Cerrar();
+            return existe;
         }
 
         public SqlParameter CrearParametro(string nombre, DateTime valor)

@@ -46,14 +46,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="CU_LOGIN.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CU_LOGIN.Designer.cs">
+      <DependentUpon>CU_LOGIN.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CU_REGISTRO.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CU_REGISTRO.Designer.cs">
+      <DependentUpon>CU_REGISTRO.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPartida.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="frmPartida.Designer.cs">
+      <DependentUpon>frmPartida.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmPrincipal.Designer.cs">
+      <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmRegistro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRegistro.Designer.cs">
+      <DependentUpon>frmRegistro.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="CU_LOGIN.resx">
+      <DependentUpon>CU_LOGIN.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CU_REGISTRO.resx">
+      <DependentUpon>CU_REGISTRO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPartida.resx">
+      <DependentUpon>frmPartida.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmPrincipal.resx">
+      <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRegistro.resx">
+      <DependentUpon>frmRegistro.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -75,6 +114,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NEGOCIO\NEGOCIO.csproj">
+      <Project>{6d194358-16f5-413f-a1b7-19d9266c8779}</Project>
+      <Name>NEGOCIO</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -42,13 +43,14 @@ namespace NEGOCIO
             set { apellido = value; }
         }
 
-        private string username;
+        private Credencial credencial;
 
-        public string Username
+        public Credencial Credencial
         {
-            get { return username; }
-            set { username = value; }
+            get { return credencial; }
+            set { credencial = value; }
         }
+
 
         private Turno turno;
 
@@ -155,7 +157,8 @@ namespace NEGOCIO
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(acceso.CrearParametro("@nombre", this.nombre));
             parametros.Add(acceso.CrearParametro("@apellido", this.apellido));
-            parametros.Add(acceso.CrearParametro("@apellido", this.apellido));
+            parametros.Add(acceso.CrearParametro("@username", this.credencial.Username));
+            parametros.Add(acceso.CrearParametro("@contraseña", this.credencial.Contraseña));
 
             return acceso.Escribir("CREAR_JUGADOR", parametros);
         }
@@ -166,6 +169,34 @@ namespace NEGOCIO
             parametros.Add(acceso.CrearParametro("@idJugador", this.id));
 
             return acceso.Escribir("ACTUALIZAR_PARTIDAS_GANADAS", parametros);
+        }
+
+        public bool ValidarUsuario()
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@username", this.credencial.Username));
+
+            return acceso.Validar("VALIDAR_USUARIO", parametros);
+        }
+
+        public Jugador Login()
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@username", this.credencial.Username));
+            parametros.Add(acceso.CrearParametro("@contraseña", this.credencial.Contraseña));
+
+            DataTable tabla = acceso.Leer("VALIDAR_LOGIN", parametros);
+
+            if(tabla.Rows.Count > 0)
+            {
+                DataRow registro = tabla.Rows[0];
+                this.nombre = registro["nombre"].ToString();
+                this.apellido = registro["apellido"].ToString();
+
+                return this;
+            }
+
+            return null;
         }
 
 
