@@ -13,8 +13,9 @@ namespace NEGOCIO
             this.posicionInicial = posicionInicial;
             this.activa = activa;
             this.color = color;
+            this.cargarMovimientos();
         }
-        private List<Movimiento> movimientos;
+        private List<Movimiento> movimientos = new List<Movimiento>();
 
         public List<Movimiento> Movimientos
         {
@@ -50,9 +51,18 @@ namespace NEGOCIO
 
         public override List<Celda> getCeldasDestino(Tablero tablero, Celda celdaActual)
         {
+            movimientos.Clear();
+            this.cargarMovimientos();
             List<Movimiento> movDisp = tablero.VerificarEnroque(this, movimientos);
             movDisp = tablero.VerificarAmenaza(this, movDisp);
             return base.PosiblesDestinos(tablero, celdaActual, movDisp);
+        }
+
+        public List<Celda> getCeldasDestinoSinAmenazaNiEnroque(Tablero tablero, Celda celdaActual)
+        {
+            movimientos.Clear();
+            this.cargarMovimientos();
+            return base.PosiblesDestinos(tablero, celdaActual, movimientos);
         }
     }
 }

@@ -23,7 +23,7 @@ namespace NEGOCIO
             set { color = value; }
         }
 
-        protected List<Celda> celdasDisponibles;
+        protected List<Celda> celdasDisponibles = new List<Celda>();
 
         public List<Celda> CeldasDisponibles
         {
@@ -84,7 +84,7 @@ namespace NEGOCIO
                 vertical += incrementoVertical;
             }
             //Verifica solo las celdas disponibles que apuntan al Rey contrario
-            if(celdaDestino.Pieza != null && celdaDestino.Pieza is Rey && celdaDestino.Pieza.Color != this.color)
+            if(celdaDestino != null && celdaDestino.Pieza != null && celdaDestino.Pieza is Rey && celdaDestino.Pieza.Color != this.color)
             {
                 celdasDispJaqueRey = cDisp;
             }
@@ -105,7 +105,7 @@ namespace NEGOCIO
                 }
 
                 //Verifica solo las celdas disponibles que apuntan al Rey contrario
-                if (celdaDestino.Pieza != null && celdaDestino.Pieza is Rey && celdaDestino.Pieza.Color != this.color)
+                if (celdaDestino != null && celdaDestino.Pieza != null && celdaDestino.Pieza is Rey && celdaDestino.Pieza.Color != this.color)
                 {
                     celdasDispJaqueRey.Add(celdaDestino);
                 }

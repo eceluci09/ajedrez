@@ -17,6 +17,7 @@ namespace NEGOCIO
 
         public override List<Celda> getCeldasDestino(Tablero tablero, Celda celdaActual)
         {
+            celdasDisponibles.Clear();
             Celda celda = this.VerificarSiPuedeEnrocar(tablero);
             if (celda != null)
             {
@@ -63,7 +64,7 @@ namespace NEGOCIO
                     {
                         movimiento.Horizontal = 3;
                         cel = tablero.getCelda(c, movimiento);
-                        if (cel.Pieza != null)
+                        if (cel.Pieza == null)
                         {
                             return cel;
                         }
@@ -79,7 +80,7 @@ namespace NEGOCIO
                     {
                         movimiento.Horizontal = -2;
                         cel = tablero.getCelda(c, movimiento);
-                        if (cel.Pieza != null)
+                        if (cel.Pieza == null)
                         {
                             return cel;
                         }

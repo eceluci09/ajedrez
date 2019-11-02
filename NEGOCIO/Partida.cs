@@ -45,7 +45,7 @@ namespace NEGOCIO
         }
 
 
-        private List<Movimiento> movimientos;
+        private List<Movimiento> movimientos = new List<Movimiento>();
 
         public List<Movimiento> Movimientos
         {
@@ -70,6 +70,13 @@ namespace NEGOCIO
             set { tablas = value; }
         }
 
+        public void Iniciar(List<Jugador> jugadores)
+        {
+            jugador1 = jugadores[0];
+            jugador2 = jugadores[1];
+
+            this.activa = true;
+        }
 
         public void AsignarTurno()
         {
@@ -95,10 +102,23 @@ namespace NEGOCIO
                 jugador1.Turno = null;
             }
 
-            turnoAnterior.Activo = false;
+            if(turnoAnterior != null)turnoAnterior.Activo = false;
 
             turnos.Add(turno);
+        }
 
+        public Jugador VerificarJugadorTurnoActual()
+        {
+            if (jugador1.Turno != null)
+            {
+                return jugador1;
+            }
+            else
+            if (jugador2.Turno != null)
+            {
+                return jugador2;
+            }
+            return null;
         }
 
         public Turno VerificarTurnoActivo()

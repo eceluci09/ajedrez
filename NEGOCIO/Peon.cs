@@ -17,6 +17,7 @@ namespace NEGOCIO
 
         public override List<Celda> getCeldasDestino(Tablero tablero, Celda celdaActual)
         {
+            celdasDisponibles.Clear();
             Movimiento movimiento = new Movimiento();
             movimiento.Horizontal = 0;
             movimiento.Vertical = -2;
@@ -58,7 +59,7 @@ namespace NEGOCIO
             }
             Celda celdaHayPeonContrario = null;
             //Peon al paso
-            if ((this.PosicionInicial.Equals("ARRIBA") && celdaActual.Fila == 4) || (this.PosicionInicial.Equals("ABAJO") && celdaActual.Fila == 5))
+            if ((this.PosicionInicial.Equals("ARRIBA") && celdaActual.Fila == 5) || (this.PosicionInicial.Equals("ABAJO") && celdaActual.Fila == 4))
             {
                 movimiento.Horizontal = -1;
                 movimiento.Vertical = 0;
@@ -77,13 +78,40 @@ namespace NEGOCIO
             {
                 celdasDisponibles.Add(celdaDestino);
             }
-            if ((this.PosicionInicial.Equals("ARRIBA") && celdaActual.Fila == 4) || (this.PosicionInicial.Equals("ABAJO") && celdaActual.Fila == 5))
+            if ((this.PosicionInicial.Equals("ARRIBA") && celdaActual.Fila == 5) || (this.PosicionInicial.Equals("ABAJO") && celdaActual.Fila == 4))
             {
                 movimiento.Horizontal = 1;
                 movimiento.Vertical = 0;
                 celdaHayPeonContrario = tablero.getCelda(celdaActual, movimiento);
             }
             if (celdaHayPeonContrario != null && celdaHayPeonContrario.Pieza != null && celdaHayPeonContrario.Pieza is Peon && celdaHayPeonContrario.Pieza.Color != this.color)
+            {
+                celdasDisponibles.Add(celdaDestino);
+            }
+
+            return celdasDisponibles;
+
+        }
+
+
+        public List<Celda> getCeldasDestinoRey(Tablero tablero, Celda celdaActual)
+        {
+            celdasDisponibles.Clear();
+            Movimiento movimiento = new Movimiento();
+            movimiento.Horizontal = -1;
+            movimiento.Vertical = 1;
+
+            Celda celdaDestino = tablero.getCelda(celdaActual, movimiento);
+            if (celdaDestino != null && celdaDestino.Pieza == null)
+            {
+                celdasDisponibles.Add(celdaDestino);
+            }
+
+            movimiento.Horizontal = 1;
+            movimiento.Vertical = 1;
+
+            celdaDestino = tablero.getCelda(celdaActual, movimiento);
+            if (celdaDestino != null && celdaDestino.Pieza == null)
             {
                 celdasDisponibles.Add(celdaDestino);
             }

@@ -13,14 +13,19 @@ namespace PRESENTACION
 {
     public partial class frmPartida : Form
     {
+        List<Jugador> jugadores;
         Form _principal;
+        List<CU_CELDA> celdas = new List<CU_CELDA>();
         public frmPartida(Form principal, List<Jugador> jugadores)
         {
             this._principal = principal;
+            this.jugadores = jugadores;
             InitializeComponent();
         }
         Partida partida;
         Tablero tablero;
+
+        CU_CELDA celdaOrigen;
         private void Button1_Click(object sender, EventArgs e)
         {
             this.Hide();
@@ -32,7 +37,7 @@ namespace PRESENTACION
         {
             partida = new Partida();
             tablero = new Tablero();
-            List<CU_CELDA> celdas = new List<CU_CELDA>();
+            tablero.Partida = partida;
 
             foreach(Celda celda in tablero.Celdas)
             {
@@ -43,6 +48,118 @@ namespace PRESENTACION
                 celdas.Add(cel);
             }
 
+            partida.Iniciar(jugadores);
+
+            //Asigno piezas al jugador 
+            //JUGADOR 1: BLANCAS
+            //JUGADOR 2: NEGRAS
+            foreach(Pieza pieza in tablero.Piezas)
+            {
+                if(pieza.Color == Color.White)
+                {
+                    partida.Jugador1.Piezas.Add(pieza);
+
+                } else if(pieza.Color == Color.Black) {
+
+                    partida.Jugador2.Piezas.Add(pieza);
+                }
+            }
+
+            partida.AsignarTurno();
+
+            foreach(CU_CELDA control in celdas)
+            {
+               control.pictureBox.Click += Control_Click;
+              
+            }
+
+
+
+        }
+
+        private void Control_Click(object sender, EventArgs e)
+        {
+            CU_CELDA CU_celda = (from CU_CELDA cu_celda in celdas
+                                 where (PictureBox)sender == (cu_celda.pictureBox)
+                                 select cu_celda).FirstOrDefault();
+
+            Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
+
+            //Verifica si selecciono una pieza o una celda vacia
+
+            if (CU_celda.Celda.Pieza != null) {
+
+                VerificarMovimientosDisponibles(CU_celda, jugadorActivo);
+
+            } else
+            {
+                MoverPieza(CU_celda, celdaOrigen, jugadorActivo);
+            }
+
+            
+        }
+
+        private void MoverPieza(CU_CELDA celdaDestino, CU_CELDA celdaOrigen, Jugador jugadorActivo)
+        {
+            if (celdaDestino.Marcado)
+            {
+                Pieza piezaAMover = celdaOrigen.Celda.Pieza;
+                Celda celdaActual = tablero.getCelda(piezaAMover);
+                jugadorActivo.Mover(piezaAMover, tablero, celdaActual, celdaDestino.Celda);
+
+                LimpiarCeldasDisponibles();
+
+                ActualizarTablero(celdaOrigen, celdaDestino);
+            }
+
+            
+        }
+
+        private void ActualizarTablero(CU_CELDA celdaOrigen, CU_CELDA celdaDestino)
+        {
+            celdaOrigen.ActualizarCelda();
+            celdaDestino.ActualizarCelda();
+        }
+
+        private void VerificarMovimientosDisponibles(CU_CELDA CU_celda, Jugador jugadorActivo)
+        {
+            //Limpiar celdas disponibles
+
+            LimpiarCeldasDisponibles();
+
+                     
+            CU_CELDA c = (from CU_CELDA cu_celda in celdas
+                          where jugadorActivo.Piezas.Contains(CU_celda.Celda.Pieza)
+                          select cu_celda).FirstOrDefault();
+
+            if (c != null)
+            {
+                Pieza pieza = CU_celda.Celda.Pieza;
+                Celda celda = CU_celda.Celda;
+                List<Celda> celdasDisponibles = pieza.getCeldasDestino(tablero, celda);
+
+                foreach (CU_CELDA control in celdas)
+                {
+                    if (celdasDisponibles.Contains(control.Celda))
+                    {
+                        control.MarcarCeldaDisponible();
+                    }
+                }
+
+                celdaOrigen = CU_celda;
+            }
+        }
+
+        private void LimpiarCeldasDisponibles()
+        {
+            List<CU_CELDA> celdasALimpiar = (from CU_CELDA celdaLimpiar in celdas
+                                             where celdaLimpiar.Marcado == true
+                                             select celdaLimpiar).ToList();
+
+            foreach (CU_CELDA celdaALimpiar in celdasALimpiar)
+            {
+                celdaALimpiar.DesmarcarCeldaDisponible();
+            }
         }
     }
 }

@@ -27,6 +27,19 @@ namespace PRESENTACION
         public delegate bool delVerificarJugador(Jugador jugador);
         public event delVerificarJugador VerificarJugador;
 
+        public string Usuario
+        {
+            get { return txtUsername.Text; }
+            set { txtUsername.Text = value; }
+        }
+
+        public string Contraseña
+        {
+            get { return txtContraseña.Text; }
+            set { txtContraseña.Text = value; }
+        }
+
+
         private Jugador jugadorLogueado = null;
 
         public Jugador JugadorLogueado

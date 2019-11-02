@@ -53,6 +53,14 @@ namespace PRESENTACION
 
             cU_LOGIN1.VerificarJugador += VerificarJugador;
             cU_LOGIN2.VerificarJugador += VerificarJugador;
+
+            //Hardcode jugadores
+
+            cU_LOGIN1.Usuario = "eceluci";
+            cU_LOGIN1.Contraseña = "eceluci";
+
+            cU_LOGIN2.Usuario = "fdipaola";
+            cU_LOGIN2.Contraseña = "fdipaola";
         }
 
         private void AñadirJugador(Jugador jugador)

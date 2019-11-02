@@ -20,7 +20,18 @@ namespace PRESENTACION
             this.label1.Visible = false;
         }
 
-        Graphics graphics;
+        public PictureBox pictureBox
+        {
+            get { return pictureBox1; }
+            set { pictureBox1 = value; }
+        }
+
+        public bool Marcado
+        {
+            get { return label1.Visible; }
+            set { label1.Visible = value; }
+        }
+
 
         private Celda celda;
 
@@ -33,13 +44,13 @@ namespace PRESENTACION
         public void AsignarCelda(Celda celda, Panel panel)
         {
             this.celda = celda;
-            UbicarPieza();
+            ActualizarCelda();
             AsignarColor();
             AsignarPosicion(panel);
             
         }
 
-        private void UbicarPieza()
+        public void ActualizarCelda()
         {
             if(celda.Pieza != null)
             {
@@ -47,6 +58,9 @@ namespace PRESENTACION
                     , celda.Pieza.GetType().Name, celda.Pieza.Color.Name);
                 pictureBox1.Image = (Image)Properties.Resources.ResourceManager.GetObject(image.ToLower());
                 pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            } else
+            {
+                pictureBox1.Image = null;
             }
         }
 
@@ -67,9 +81,19 @@ namespace PRESENTACION
             this.BackColor = celda.Color;
         }
 
-        private void PictureBox1_Click(object sender, EventArgs e)
+        public void MarcarCeldaDisponible()
         {
-            this.label1.Visible = true;
+            Marcado = true;
+        }
+
+        public void DesmarcarCeldaDisponible()
+        {
+            Marcado = false;
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

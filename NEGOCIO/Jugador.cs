@@ -19,7 +19,7 @@ namespace NEGOCIO
             set { id = value; }
         }
 
-        private List<Pieza> piezas;
+        private List<Pieza> piezas = new List<Pieza>();
 
         public List<Pieza> Piezas
         {

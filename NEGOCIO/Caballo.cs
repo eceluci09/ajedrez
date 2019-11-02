@@ -8,13 +8,14 @@ namespace NEGOCIO
 {
     public class Caballo : Pieza, IMOVIMIENTOFIJO
     {
-        private List<Movimiento> movimientos;
+        private List<Movimiento> movimientos = new List<Movimiento>();
 
         public Caballo(string posicionInicial, bool activa, Color color) : base(posicionInicial, activa, color)
         {
             this.posicionInicial = posicionInicial;
             this.activa = activa;
             this.color = color;
+            this.cargarMovimientos();
         }
 
         public List<Movimiento> Movimientos

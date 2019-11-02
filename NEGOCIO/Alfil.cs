@@ -17,6 +17,7 @@ namespace NEGOCIO
 
         public override List<Celda> getCeldasDestino(Tablero tablero, Celda celdaActual)
         {
+            celdasDisponibles.Clear();
             celdasDisponibles.AddRange(base.PosiblesDestinos(tablero, celdaActual, 1, -1));
             celdasDisponibles.AddRange(base.PosiblesDestinos(tablero, celdaActual, 1, 1));
             celdasDisponibles.AddRange(base.PosiblesDestinos(tablero, celdaActual, -1, -1));

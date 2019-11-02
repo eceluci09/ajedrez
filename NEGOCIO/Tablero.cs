@@ -51,98 +51,98 @@ namespace NEGOCIO
             //Blancas
 
             Torre torre1B = new Torre(ABAJO, true, Color.White);
-            getCelda(1, 1).Pieza = torre1B;
+            getCelda(8, 1).Pieza = torre1B;
 
             piezas.Add(torre1B);
 
             Caballo caballo1B = new Caballo(ABAJO, true, Color.White);
-            getCelda(1, 2).Pieza = caballo1B;
+            getCelda(8, 2).Pieza = caballo1B;
 
             piezas.Add(caballo1B);
 
             Alfil alfil1B = new Alfil(ABAJO, true, Color.White);
-            getCelda(1, 3).Pieza = alfil1B;
+            getCelda(8, 3).Pieza = alfil1B;
 
             piezas.Add(alfil1B);
 
             Reina reinaB = new Reina(ABAJO, true, Color.White);
-            getCelda(1, 4).Pieza = reinaB;
+            getCelda(8, 4).Pieza = reinaB;
 
             piezas.Add(reinaB);
 
             Rey reyB = new Rey(ABAJO, true, Color.White);
-            getCelda(1, 5).Pieza = reyB;
+            getCelda(8, 5).Pieza = reyB;
 
             piezas.Add(reyB);
 
             Alfil alfil2B = new Alfil(ABAJO, true, Color.White);
-            getCelda(1, 6).Pieza = alfil2B;
+            getCelda(8, 6).Pieza = alfil2B;
 
             piezas.Add(alfil2B);
 
             Caballo caballo2B = new Caballo(ABAJO, true, Color.White);
-            getCelda(1, 7).Pieza = caballo2B;
+            getCelda(8, 7).Pieza = caballo2B;
 
             piezas.Add(caballo2B);
 
             Torre torre2B = new Torre(ABAJO, true, Color.White);
-            getCelda(1, 8).Pieza = torre2B;
+            getCelda(8, 8).Pieza = torre2B;
 
             piezas.Add(torre2B);
 
             for (int i = 0; i < 8; i++)
             {
                 Peon peon = new Peon(ABAJO, true, Color.White);
-                getCelda(2, i + 1).Pieza = peon;
+                getCelda(7, i + 1).Pieza = peon;
                 piezas.Add(peon);
             }
 
             //Negras
 
             Torre torre1N = new Torre(ARRIBA, true, Color.Black);
-            getCelda(8, 1).Pieza = torre1N;
+            getCelda(1, 1).Pieza = torre1N;
 
             piezas.Add(torre1N);
 
             Caballo caballo1N = new Caballo(ARRIBA, true, Color.Black);
-            getCelda(8, 2).Pieza = caballo1N;
+            getCelda(1, 2).Pieza = caballo1N;
 
             piezas.Add(caballo1N);
 
             Alfil alfil1N = new Alfil(ARRIBA, true, Color.Black);
-            getCelda(8, 3).Pieza = alfil1N;
+            getCelda(1, 3).Pieza = alfil1N;
 
             piezas.Add(alfil1N);
 
             Reina reinaN = new Reina(ARRIBA, true, Color.Black);
-            getCelda(8, 4).Pieza = reinaN;
+            getCelda(1, 4).Pieza = reinaN;
 
             piezas.Add(reinaN);
 
             Rey reyN = new Rey(ARRIBA, true, Color.Black);
-            getCelda(8, 5).Pieza = reyN;
+            getCelda(1, 5).Pieza = reyN;
 
             piezas.Add(reyN);
 
             Alfil alfil2N = new Alfil(ARRIBA, true, Color.Black);
-            getCelda(8, 6).Pieza = alfil2N;
+            getCelda(1, 6).Pieza = alfil2N;
 
             piezas.Add(alfil2N);
 
             Caballo caballo2N = new Caballo(ARRIBA, true, Color.Black);
-            getCelda(8, 7).Pieza = caballo2N;
+            getCelda(1, 7).Pieza = caballo2N;
 
             piezas.Add(caballo2N);
 
             Torre torre2N = new Torre(ARRIBA, true, Color.Black);
-            getCelda(8, 8).Pieza = torre2N;
+            getCelda(1, 8).Pieza = torre2N;
 
             piezas.Add(torre2N);
 
             for (int i = 0; i < 8; i++)
             {
                 Peon peon = new Peon(ARRIBA, true, Color.Black);
-                getCelda(7, i + 1).Pieza = peon;
+                getCelda(2, i + 1).Pieza = peon;
                 piezas.Add(peon);
             }
 
@@ -186,16 +186,25 @@ namespace NEGOCIO
 
         public Celda getCelda(Celda celdaActual, Movimiento movimiento)
         {
-            Pieza pieza = celdaActual.Pieza;
-            if (pieza == null) return null;
+            try
+            {
+                Pieza pieza = celdaActual.Pieza;
+                if (pieza == null) return null;
 
-            int horizontal = celdaActual.Columna + movimiento.Horizontal;
-            int vertical = (pieza.PosicionInicial.Equals(ARRIBA) ? celdaActual.Fila - movimiento.Vertical : celdaActual.Fila + movimiento.Vertical);
-            Celda celda = (from Celda cel in celdas
-                           where cel.Columna == horizontal && cel.Fila == vertical
-                           select cel).FirstOrDefault();
+                int horizontal = celdaActual.Columna + movimiento.Horizontal;
+                int vertical = (pieza.PosicionInicial.Equals(ARRIBA) ? celdaActual.Fila + movimiento.Vertical : celdaActual.Fila - movimiento.Vertical);
+                Celda celda = (from Celda cel in celdas
+                               where cel.Columna == horizontal && cel.Fila == vertical
+                               select cel).FirstOrDefault();
 
-            return celda;
+                return celda;
+            }
+            catch (StackOverflowException ex)
+            {
+                
+            }
+
+            return null;
 
         }
 
@@ -217,7 +226,6 @@ namespace NEGOCIO
         {
             bool coronacion = false;
             Pieza pieza = actual.Pieza;
-            actual.Pieza = null;
             Jugador jugadorRival = null;
             Pieza piezaComida = null;
             if (destino.Pieza != null)
@@ -273,7 +281,7 @@ namespace NEGOCIO
             this.VerificarMovimiento(actual, destino, pieza, jug);
             string tipo = (!coronacion) ? this.verificarJaqueOJaqueMate(jug, pieza) : string.Empty;
             if (tipo.Equals("JAQUE")) jugadorRival.PiezaJaque = pieza;
-
+            actual.Pieza = null;
             partida.ChequearGanador(tipo, jug);
 
             return coronacion;
@@ -338,6 +346,11 @@ namespace NEGOCIO
 
             //Verifica que no haya piezas de por medio
 
+            if(movimientos == null)
+            {
+
+            }
+
             if (movimientos.Contains(mov1) || movimientos.Contains(mov2))
             {
                 bool removerMov1 = false;
@@ -362,7 +375,7 @@ namespace NEGOCIO
                         removerMov1 = true;
                     }
                 }
-
+                celdaAMover = null;
                 for (int i = 0; i < 3; i++)
                 {
                     mov.Vertical = 0;
@@ -466,6 +479,8 @@ namespace NEGOCIO
         {
             Celda c = this.getCelda(celdaActual, mov);
 
+            if (c == null) return movimientos;
+
             Movimiento movimientoTorre = (from Movimiento mt in partida.Movimientos
                                           where mt.Pieza == c.Pieza
                                           select mt).FirstOrDefault();
@@ -498,8 +513,16 @@ namespace NEGOCIO
             if (reyContrario != null)
             {
                 //Verificar jaque mate
-
-                List<Celda> celdasAMoverseProxMov = piezaUltMov.getCeldasDestino(this, this.getCelda(piezaUltMov));
+                List<Celda> celdasAMoverseProxMov = null;
+                if (piezaUltMov is Rey)
+                {
+                    celdasAMoverseProxMov = ((Rey)piezaUltMov).getCeldasDestinoSinAmenazaNiEnroque(this, this.getCelda(piezaUltMov));
+                }
+                else
+                {
+                    celdasAMoverseProxMov = piezaUltMov.getCeldasDestino(this, this.getCelda(piezaUltMov));
+                }
+                
 
                 Celda celdaActualRey = this.getCelda(reyContrario);
 
@@ -542,27 +565,53 @@ namespace NEGOCIO
         {
             Celda celdaActual = this.getCelda(pieza);
             Celda celdaAMover = null;
-
+            List<Movimiento> movi = new List<Movimiento>();
             foreach (Movimiento mov in movimientos)
             {
-                foreach (Pieza p in piezas)
+                celdaAMover = this.getCelda(celdaActual, mov);
+
+                if (celdaAMover != null)
                 {
-                    if (p.Color != pieza.Color && pieza.Activa == true)
+                    foreach (Pieza p in piezas)
                     {
-                        celdaAMover = this.getCelda(celdaActual, mov);
-                        foreach (Celda celdaDisp in p.getCeldasDestino(this, this.getCelda(p)))
+                        if (p.Color != pieza.Color && pieza.Activa == true)
                         {
-                            if (celdaAMover.Equals(celdaDisp))
+                            List<Celda> cel = new List<Celda>();
+                            if (p is Rey)
                             {
-                                if(movimientos.Contains(mov))
+                                cel = ((Rey)p).getCeldasDestinoSinAmenazaNiEnroque(this, this.getCelda(p));
+                            }
+                            else
+                            {
+                                if (p is Peon)
                                 {
-                                    movimientos.Remove(mov);
+                                    cel = ((Peon)p).getCeldasDestinoRey(this, this.getCelda(p));
                                 }
-                                
+                                else
+                                {
+                                    cel = p.getCeldasDestino(this, this.getCelda(p));
+                                }
+                            }
+                            foreach (Celda celdaDisp in cel)
+                            {
+                                if (celdaAMover.Equals(celdaDisp))
+                                {
+                                    if (movimientos.Contains(mov))
+                                    {
+                                        movi.Add(mov);
+                                    }
+
+                                }
                             }
                         }
                     }
+
                 }
+            }
+
+            foreach(Movimiento m in movi)
+            {
+                movimientos.Remove(m);
             }
 
             return movimientos;
@@ -587,7 +636,7 @@ namespace NEGOCIO
 
             if (pieza.PosicionInicial.Equals(ARRIBA) && pieza is Rey)
             {
-                if (actual.Fila == 8 && destino.Fila == 8)
+                if (actual.Fila == 1 && destino.Fila == 1)
                 {
                     if((actual.Columna + 2 == destino.Columna) || (actual.Columna - 2 == destino.Columna))
                     {
@@ -603,7 +652,7 @@ namespace NEGOCIO
                 }
             } else if(pieza.PosicionInicial.Equals(ABAJO) && pieza is Rey)
             {
-                if (actual.Fila == 1 && destino.Fila == 1)
+                if (actual.Fila == 8 && destino.Fila == 8)
                 {
                     if ((actual.Columna + 2 == destino.Columna) || (actual.Columna - 2 == destino.Columna))
                     {
@@ -628,7 +677,7 @@ namespace NEGOCIO
         {
             if(pieza.PosicionInicial.Equals(ARRIBA))
             {
-                if(destino.Fila == 1)
+                if(destino.Fila == 8)
                 {
                     return true;
                 } else
@@ -637,7 +686,7 @@ namespace NEGOCIO
                 }
             } else if(pieza.PosicionInicial.Equals(ABAJO))
             {
-                if (destino.Fila == 8)
+                if (destino.Fila == 1)
                 {
                     return true;
                 }
