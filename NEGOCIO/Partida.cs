@@ -121,6 +121,11 @@ namespace NEGOCIO
             return null;
         }
 
+        public int VerificarMovimientosJugadorActivo(Jugador jugador)
+        {
+            return jugador.Turno.Movimiento.Count;
+        }
+
         public Turno VerificarTurnoActivo()
         {
             Turno actual = (from Turno tur in turnos

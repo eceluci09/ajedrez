@@ -79,21 +79,34 @@ namespace PRESENTACION
 
         private void Control_Click(object sender, EventArgs e)
         {
+            Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
+
+            
             CU_CELDA CU_celda = (from CU_CELDA cu_celda in celdas
                                  where (PictureBox)sender == (cu_celda.pictureBox)
                                  select cu_celda).FirstOrDefault();
 
-            Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
 
-            //Verifica si selecciono una pieza o una celda vacia
+            if ((partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 1 && (CU_celda.Celda.Pieza is Torre || CU_celda.Marcado)) || 
+                (partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 0))
+            {
 
-            if (CU_celda.Celda.Pieza != null) {
 
-                VerificarMovimientosDisponibles(CU_celda, jugadorActivo);
+                //Verifica si selecciono una pieza o una celda vacia
 
+                if (CU_celda.Celda.Pieza != null)
+                {
+
+                    VerificarMovimientosDisponibles(CU_celda, jugadorActivo);
+
+                }
+                else
+                {
+                    MoverPieza(CU_celda, celdaOrigen, jugadorActivo);
+                }
             } else
             {
-                MoverPieza(CU_celda, celdaOrigen, jugadorActivo);
+                LimpiarCeldasDisponibles();
             }
 
             
@@ -110,6 +123,12 @@ namespace PRESENTACION
                 LimpiarCeldasDisponibles();
 
                 ActualizarTablero(celdaOrigen, celdaDestino);
+
+                if(!partida.VerificarDobleTurno(jugadorActivo))
+                {
+                    partida.AsignarTurno();
+                }
+                
             }
 
             

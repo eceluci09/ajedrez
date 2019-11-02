@@ -86,7 +86,14 @@ namespace NEGOCIO
 
                     cel = tablero.getCelda(c, movimiento);
 
-                    if (cel.Pieza != null && cel.Pieza is Rey && cel.Pieza.Color == this.color)
+                    if (cel != null && cel.Pieza is Rey)
+                    {
+                        movimientoRey = (from Movimiento m in tablero.Partida.Movimientos
+                                         where m.Pieza == cel.Pieza
+                                         select m).ToList();
+                    }
+
+                    if (cel.Pieza != null && cel.Pieza is Rey && cel.Pieza.Color == this.color && movimientoRey.Count == 1)
                     {
                         movimiento.Horizontal = -2;
                         cel = tablero.getCelda(c, movimiento);
