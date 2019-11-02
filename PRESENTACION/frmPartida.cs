@@ -73,8 +73,19 @@ namespace PRESENTACION
               
             }
 
+            tablero.InformarJaque += Tablero_InformarJaque;
+            tablero.InformarJaqueMate += Tablero_InformarJaqueMate;
 
+        }
 
+        private void Tablero_InformarJaqueMate(Rey contrario)
+        {
+            MessageBox.Show("JAQUE MATE AL REY " + contrario.Color.Name);
+        }
+
+        private void Tablero_InformarJaque(Rey contrario)
+        {
+            MessageBox.Show("JAQUE AL REY " + contrario.Color.Name);
         }
 
         private void Control_Click(object sender, EventArgs e)

@@ -15,6 +15,11 @@ namespace NEGOCIO
         private static string ARRIBA = "ARRIBA";
         private static string ABAJO = "ABAJO";
 
+        public delegate void delInformarJaque(Rey contrario);
+        public event delInformarJaque InformarJaque;
+
+        public delegate void delInformarJaqueMate(Rey contrario);
+        public event delInformarJaque InformarJaqueMate;
 
         private List<Pieza> piezas = new List<Pieza>();
 
@@ -228,23 +233,31 @@ namespace NEGOCIO
             Pieza pieza = actual.Pieza;
             Jugador jugadorRival = null;
             Pieza piezaComida = null;
-            if (destino.Pieza != null)
-            { 
+            
                 if (jug.Equals(partida.Jugador1))
                 {
-                    piezaComida = (from Pieza p in partida.Jugador2.Piezas
-                                   where p.Equals(destino.Pieza)
-                                   select p).FirstOrDefault();
+                    if (destino.Pieza != null)
+                    {
+                        piezaComida = (from Pieza p in partida.Jugador2.Piezas
+                                       where p.Equals(destino.Pieza)
+                                       select p).FirstOrDefault();
+                    }
 
                     jugadorRival = partida.Jugador2;
                 } else
                 {
-                    piezaComida = (from Pieza p in partida.Jugador1.Piezas
-                                         where p.Equals(destino.Pieza)
-                                         select p).FirstOrDefault();
+                    if (destino.Pieza != null)
+                    {
+                        piezaComida = (from Pieza p in partida.Jugador1.Piezas
+                                       where p.Equals(destino.Pieza)
+                                       select p).FirstOrDefault();
+                    }
 
                     jugadorRival = partida.Jugador1;
                 }
+
+            if (destino.Pieza != null)
+            {
 
                 piezaComida.Activa = false;
 
@@ -254,6 +267,7 @@ namespace NEGOCIO
 
                 piezaComida.Activa = false;
             }
+            
             //Verifica si el peon comio con el peon al paso
             if (pieza is Peon)
             {
@@ -507,8 +521,43 @@ namespace NEGOCIO
 
             if (reyContrario != null)
             {
+                Celda celdaCoincidente = null;
+                bool amenaza = false;
+                Celda celdaActualRey = this.getCelda(reyContrario);
+
+                List<Celda> celdaAMoverse = reyContrario.getCeldasDestino(this, celdaActualRey);
+
+                foreach (Pieza pieza in piezas)
+                {
+                    if (piezaUltMov.Color == pieza.Color && pieza.Activa == true && !(pieza is Rey))
+                    {
+                        List<Celda> celdasAMover = pieza.getCeldasDestino(this, this.getCelda(pieza));
+                        celdaCoincidente = (from Celda c in celdasAMover
+                                            where c.Equals(celdaActualRey)
+                                            select c).FirstOrDefault();
+
+                        if (celdaCoincidente != null) amenaza = true;
+
+                    }
+                }
+
+                if(amenaza)
+                {
+                    if(celdaAMoverse.Count > 0)
+                    {
+                        tipo = "JAQUE";
+                        this.InformarJaque((Rey)reyContrario);
+                    } else
+                    {
+                        tipo = "JAQUE MATE";
+                        this.InformarJaqueMate((Rey)reyContrario);
+                    }
+                }
+
+
+
                 //Verificar jaque mate
-                List<Celda> celdasAMoverseProxMov = null;
+                /*List<Celda> celdasAMoverseProxMov = null;
                 if (piezaUltMov is Rey)
                 {
                     celdasAMoverseProxMov = ((Rey)piezaUltMov).getCeldasDestinoSinAmenazaNiEnroque(this, this.getCelda(piezaUltMov));
@@ -549,7 +598,7 @@ namespace NEGOCIO
                             tipo = "JAQUE";
                         }
                     }
-                }
+                }*/
             }
 
             return tipo;
