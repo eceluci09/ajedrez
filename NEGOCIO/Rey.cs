@@ -54,7 +54,15 @@ namespace NEGOCIO
             movimientos.Clear();
             this.cargarMovimientos();
             List<Movimiento> movDisp = tablero.VerificarEnroque(this, movimientos);
-            movDisp = tablero.VerificarAmenaza(this, movDisp);
+            movDisp = tablero.VerificarAmenaza(this, movDisp, false);
+            return base.PosiblesDestinos(tablero, celdaActual, movDisp);
+        }
+
+        public List<Celda> getCeldasDestino(Tablero tablero, Celda celdaActual, bool esElContrario)
+        {
+            movimientos.Clear();
+            this.cargarMovimientos();
+            List<Movimiento> movDisp = tablero.VerificarAmenaza(this, movimientos, esElContrario);
             return base.PosiblesDestinos(tablero, celdaActual, movDisp);
         }
 

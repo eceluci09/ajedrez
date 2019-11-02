@@ -346,11 +346,6 @@ namespace NEGOCIO
 
             //Verifica que no haya piezas de por medio
 
-            if(movimientos == null)
-            {
-
-            }
-
             if (movimientos.Contains(mov1) || movimientos.Contains(mov2))
             {
                 bool removerMov1 = false;
@@ -362,11 +357,11 @@ namespace NEGOCIO
 
                     if (celdaAMover == null)
                     {
-                        celdaAMover = this.getCelda(celdaActual, mov);
+                        celdaAMover = this.getCelda(celdaActual.Fila, celdaActual.Columna + mov.Horizontal);
                     }
                     else
                     {
-                        celdaAMover = this.getCelda(celdaAMover, mov);
+                        celdaAMover = this.getCelda(celdaAMover.Fila, celdaAMover.Columna + mov.Horizontal);
                     }
 
 
@@ -383,11 +378,11 @@ namespace NEGOCIO
 
                     if (celdaAMover == null)
                     {
-                        celdaAMover = this.getCelda(celdaActual, mov);
+                        celdaAMover = this.getCelda(celdaActual.Fila, celdaActual.Columna + mov.Horizontal);
                     }
                     else
                     {
-                        celdaAMover = this.getCelda(celdaAMover, mov);
+                        celdaAMover = this.getCelda(celdaAMover.Fila, celdaAMover.Columna + mov.Horizontal);
                     }
 
 
@@ -430,11 +425,11 @@ namespace NEGOCIO
                             movimientoARealizar.Horizontal = 1;
                             if (celdaAMover == null)
                             {
-                                celdaAMover = this.getCelda(celdaActual, movimientoARealizar);
+                                celdaAMover = this.getCelda(celdaActual.Fila, celdaActual.Columna + movimientoARealizar.Horizontal);
                             }
                             else
                             {
-                                celdaAMover = this.getCelda(celdaAMover, movimientoARealizar);
+                                celdaAMover = this.getCelda(celdaAMover.Fila, celdaAMover.Columna + movimientoARealizar.Horizontal);
                             }
 
                             foreach (Celda celdaDisp in p.getCeldasDestino(this, celda))
@@ -454,11 +449,11 @@ namespace NEGOCIO
                             movimientoARealizar.Horizontal = -1;
                             if (celdaAMover == null)
                             {
-                                celdaAMover = this.getCelda(celdaActual, movimientoARealizar);
+                                celdaAMover = this.getCelda(celdaActual.Fila, celdaActual.Columna + movimientoARealizar.Horizontal);
                             }
                             else
                             {
-                                celdaAMover = this.getCelda(celdaAMover, movimientoARealizar);
+                                celdaAMover = this.getCelda(celdaAMover.Fila, celdaAMover.Columna + movimientoARealizar.Horizontal);
                             }
                             foreach (Celda celdaDisp in p.getCeldasDestino(this, celda))
                             {
@@ -561,7 +556,7 @@ namespace NEGOCIO
             
         }
 
-        public List<Movimiento> VerificarAmenaza(Rey pieza, List<Movimiento> movimientos)
+        public List<Movimiento> VerificarAmenaza(Rey pieza, List<Movimiento> movimientos, bool esElContrario)
         {
             Celda celdaActual = this.getCelda(pieza);
             Celda celdaAMover = null;
@@ -577,9 +572,9 @@ namespace NEGOCIO
                         if (p.Color != pieza.Color && pieza.Activa == true)
                         {
                             List<Celda> cel = new List<Celda>();
-                            if (p is Rey)
+                            if (p is Rey && !esElContrario)
                             {
-                                cel = ((Rey)p).getCeldasDestinoSinAmenazaNiEnroque(this, this.getCelda(p));
+                                cel = ((Rey)p).getCeldasDestino(this, this.getCelda(p), true);
                             }
                             else
                             {
@@ -589,7 +584,11 @@ namespace NEGOCIO
                                 }
                                 else
                                 {
-                                    cel = p.getCeldasDestino(this, this.getCelda(p));
+                                    if(!(p is Rey) && !(p is Peon))
+                                    {
+                                        cel = p.getCeldasDestino(this, this.getCelda(p));
+                                    }
+                                                                   
                                 }
                             }
                             foreach (Celda celdaDisp in cel)
