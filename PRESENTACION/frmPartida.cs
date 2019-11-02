@@ -94,7 +94,7 @@ namespace PRESENTACION
 
                 //Verifica si selecciono una pieza o una celda vacia
 
-                if (CU_celda.Celda.Pieza != null)
+                if (CU_celda.Celda.Pieza != null && !CU_celda.Marcado)
                 {
 
                     VerificarMovimientosDisponibles(CU_celda, jugadorActivo);

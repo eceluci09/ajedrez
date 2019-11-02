@@ -578,7 +578,7 @@ namespace NEGOCIO
                             }
                             else
                             {
-                                if (p is Peon)
+                                if (p is Peon && !esElContrario)
                                 {
                                     cel = ((Peon)p).getCeldasDestinoRey(this, this.getCelda(p));
                                 }
