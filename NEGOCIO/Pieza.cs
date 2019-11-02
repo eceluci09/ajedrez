@@ -8,12 +8,23 @@ namespace NEGOCIO
 {
     public abstract class Pieza
     {
+        static int increment = 0;
         public Pieza(string posicionInicial, bool activa, Color color)
         {
             this.posicionInicial = posicionInicial;
             this.activa = activa;
             this.color = color;
+            nro = increment++;
         }
+
+        private int nro;
+
+        public int Nro
+        {
+            get { return nro; }
+            set { nro = value; }
+        }
+
 
         protected Color color;
 
@@ -111,6 +122,7 @@ namespace NEGOCIO
                 }
 
             }
+            this.celdasDisponibles = cDisp;
             return cDisp;
 
         }
@@ -122,32 +134,39 @@ namespace NEGOCIO
             return tablero.ModificarPosicionPieza(celdaActual, celdaDestino, jugador);
         }
 
-        public void getMovimientosPermitidosEnJaque(Tablero tablero, Jugador jugador)
+        public List<Celda> getMovimientosPermitidosEnJaque(Tablero tablero, Jugador jugador)
         {
             bool coincide = false;
-            if (jugador.PiezaJaque is Caballo)
-            {
-                celdasDisponibles.Clear();
-            }
-            else
-            {
+            List<Celda> celdasARemover = new List<Celda>();
+
                 foreach (Celda c in celdasDisponibles)
                 {
                     coincide = false;
-                    jugador.PiezaJaque.getCeldasDestino(tablero, tablero.getCelda(jugador.PiezaJaque));
-                    foreach (Celda celDisp in jugador.PiezaJaque.celdasDispJaqueRey)
+                    foreach(Pieza piezaJaque in jugador.PiezaJaque)
                     {
-                        if (c.Equals(celDisp))
+                        piezaJaque.getCeldasDestino(tablero, tablero.getCelda(piezaJaque));
+
+                        foreach (Celda celDisp in piezaJaque.celdasDispJaqueRey)
                         {
-                            coincide = true;
+                            if (c.Equals(celDisp))
+                            {
+                                coincide = true;
+                            }
+                        }
+                        if (!coincide && tablero.getCelda(piezaJaque) != c)
+                        {
+                            celdasARemover.Add(c);
                         }
                     }
-                    if (!coincide && tablero.getCelda(jugador.PiezaJaque) != c)
-                    {
-                        celdasDisponibles.Remove(c);
-                    }
+                    
                 }
+
+            foreach (Celda c in celdasARemover)
+            {
+                celdasDisponibles.Remove(c);
             }
+
+            return celdasDisponibles;
         }
 
     }

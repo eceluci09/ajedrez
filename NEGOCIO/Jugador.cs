@@ -69,9 +69,9 @@ namespace NEGOCIO
             set { partidasJugadas = value; }
         }
 
-        private Pieza piezaJaque;
+        private List<Pieza> piezaJaque = new List<Pieza>();
 
-        public Pieza PiezaJaque
+        public List<Pieza> PiezaJaque
         {
             get { return piezaJaque; }
             set { piezaJaque = value; }
@@ -102,7 +102,6 @@ namespace NEGOCIO
                                  select p).FirstOrDefault();
             if (existePieza != null)
             {
-                piezaJaque = null;
                 if(pieza.Mover(tablero, celdaActual, celdaDestino, this))
                 {
                     bool caballoElegido = false;

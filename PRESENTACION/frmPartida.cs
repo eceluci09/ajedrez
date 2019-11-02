@@ -102,7 +102,6 @@ namespace PRESENTACION
                 (partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 0))
             {
 
-
                 //Verifica si selecciono una pieza o una celda vacia
 
                 if (CU_celda.Celda.Pieza != null && !CU_celda.Marcado)
@@ -167,6 +166,9 @@ namespace PRESENTACION
                 Pieza pieza = CU_celda.Celda.Pieza;
                 Celda celda = CU_celda.Celda;
                 List<Celda> celdasDisponibles = pieza.getCeldasDestino(tablero, celda);
+                if (jugadorActivo.PiezaJaque != null && !(pieza is Rey)) {
+                    celdasDisponibles = pieza.getMovimientosPermitidosEnJaque(tablero, jugadorActivo);
+                }
 
                 foreach (CU_CELDA control in celdas)
                 {

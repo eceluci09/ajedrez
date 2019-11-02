@@ -172,7 +172,7 @@ namespace NEGOCIO
         public Celda getCelda(Pieza pieza)
         {
             Celda celda = (from Celda cel in celdas
-                           where cel.Pieza == pieza && pieza.Activa == true
+                           where cel.Pieza != null && cel.Pieza.Nro == pieza.Nro && pieza.Activa == true
                            select cel).FirstOrDefault();
 
 
@@ -193,6 +193,7 @@ namespace NEGOCIO
         {
             try
             {
+                if (celdaActual == null) return null;
                 Pieza pieza = celdaActual.Pieza;
                 if (pieza == null) return null;
 
@@ -293,9 +294,9 @@ namespace NEGOCIO
             destino.Pieza = pieza;
             partida.RegistrarMovimiento(actual, destino);
             this.VerificarMovimiento(actual, destino, pieza, jug);
-            string tipo = (!coronacion) ? this.verificarJaqueOJaqueMate(jug, pieza) : string.Empty;
-            if (tipo.Equals("JAQUE")) jugadorRival.PiezaJaque = pieza;
             actual.Pieza = null;
+            jugadorRival.PiezaJaque.Clear();
+            string tipo = (!coronacion) ? this.verificarJaqueOJaqueMate(jug, pieza, jugadorRival) : string.Empty;
             partida.ChequearGanador(tipo, jug);
 
             return coronacion;
@@ -502,7 +503,7 @@ namespace NEGOCIO
             return movimientos;
         }
 
-        private string verificarJaqueOJaqueMate(Jugador jugUltMov, Pieza piezaUltMov)
+        private string verificarJaqueOJaqueMate(Jugador jugUltMov, Pieza piezaUltMov, Jugador jugadorRival)
         {
             string tipo = string.Empty;
             Pieza reyContrario = null;
@@ -514,7 +515,7 @@ namespace NEGOCIO
             }
             else
             {
-                reyContrario = (from Pieza rey in partida.Jugador2.Piezas
+                reyContrario = (from Pieza rey in partida.Jugador1.Piezas
                                       where rey is Rey && rey.Activa == true
                                       select rey).FirstOrDefault();
             }
@@ -536,7 +537,11 @@ namespace NEGOCIO
                                             where c.Equals(celdaActualRey)
                                             select c).FirstOrDefault();
 
-                        if (celdaCoincidente != null) amenaza = true;
+                        if (celdaCoincidente != null)
+                        {
+                            jugadorRival.PiezaJaque.Add(pieza);
+                            amenaza = true;
+                        }
 
                     }
                 }
@@ -609,6 +614,7 @@ namespace NEGOCIO
         {
             Celda celdaActual = this.getCelda(pieza);
             Celda celdaAMover = null;
+            
             List<Movimiento> movi = new List<Movimiento>();
             foreach (Movimiento mov in movimientos)
             {
@@ -633,7 +639,7 @@ namespace NEGOCIO
                                 }
                                 else
                                 {
-                                    if(!(p is Rey) && !(p is Peon))
+                                    if(!(p is Rey) && !(p is Peon) && !esElContrario)
                                     {
                                         cel = p.getCeldasDestino(this, this.getCelda(p));
                                     }
@@ -644,13 +650,14 @@ namespace NEGOCIO
                             {
                                 if (celdaAMover.Equals(celdaDisp))
                                 {
-                                    if (movimientos.Contains(mov))
+                                    if (!movi.Contains(mov))
                                     {
                                         movi.Add(mov);
                                     }
 
                                 }
                             }
+
                         }
                     }
 
