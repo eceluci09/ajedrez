@@ -25,5 +25,16 @@ namespace NEGOCIO
 
             return celdasDisponibles;
         }
+
+        public override List<Celda> getCeldasDestinoLuegoDeComer(Tablero tablero, Celda celdaActual)
+        {
+            celdasDisponibles.Clear();
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, 1, -1));
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, 1, 1));
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, -1, -1));
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, -1, 1));
+
+            return celdasDisponibles;
+        }
     }
 }

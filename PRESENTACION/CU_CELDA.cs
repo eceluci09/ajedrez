@@ -52,7 +52,7 @@ namespace PRESENTACION
 
         public void ActualizarCelda()
         {
-            if(celda.Pieza != null)
+            if(celda.Pieza != null && celda.Pieza.Activa == true)
             {
                 string image = string.Format("{0}_{1}"
                     , celda.Pieza.GetType().Name, celda.Pieza.Color.Name);

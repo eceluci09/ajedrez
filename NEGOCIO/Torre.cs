@@ -34,6 +34,17 @@ namespace NEGOCIO
             return celdasDisponibles;
         }
 
+        public override List<Celda> getCeldasDestinoLuegoDeComer(Tablero tablero, Celda celdaActual)
+        {
+            celdasDisponibles.Clear();
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, 0, -1));
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, 0, 1));
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, 1, 0));
+            celdasDisponibles.AddRange(base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, -1, 0));
+
+            return celdasDisponibles;
+        }
+
         public Celda VerificarSiPuedeEnrocar(Tablero tablero)
         {
             Celda c = tablero.getCelda(this);

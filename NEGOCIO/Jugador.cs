@@ -94,7 +94,6 @@ namespace NEGOCIO
         }
 
 
-
         public void Mover(Pieza pieza, Tablero tablero, Celda celdaActual, Celda celdaDestino)
         {
             Pieza existePieza = (from Pieza p in piezas

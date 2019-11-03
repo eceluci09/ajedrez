@@ -169,6 +169,13 @@ namespace NEGOCIO
             }
         }
 
+        public bool VerificarCeldaDisponibleLuegoDeComer(Celda celda, Color color)
+        {
+            if (celda == null) return false;
+
+            return (celda.Pieza == null || celda.Pieza.Color == color);
+        }
+
         public Celda getCelda(Pieza pieza)
         {
             Celda celda = (from Celda cel in celdas
@@ -269,33 +276,72 @@ namespace NEGOCIO
                 piezaComida.Activa = false;
             }
             
-            //Verifica si el peon comio con el peon al paso
-            if (pieza is Peon)
-            {
-                Movimiento mov = new Movimiento();
-                mov.Horizontal = 0;
-                mov.Vertical = -1;
-
-                Celda celdaAnterior = this.getCelda(actual, mov);
-
-                if(celdaAnterior.Pieza != null && celdaAnterior.Pieza is Peon && celdaAnterior.Pieza.Color != pieza.Color)
-                {
-                    piezaComida = (from Pieza p in piezas
-                                   where p.Equals(celdaAnterior.Pieza)
-                                   select p).FirstOrDefault();
-
-                    piezaComida.Activa = false;
-                }
-
-                coronacion = this.VerificarCoronacion((Peon)pieza, destino);
-
-            }
+            
 
             destino.Pieza = pieza;
             partida.RegistrarMovimiento(actual, destino);
             this.VerificarMovimiento(actual, destino, pieza, jug);
             actual.Pieza = null;
             jugadorRival.PiezaJaque.Clear();
+
+            //Verifica si el peon comio con el peon al paso o si el contrario puede comerlo de esa manera
+            if (pieza is Peon)
+            {
+                int cantMovida = 0;
+                if (pieza.PosicionInicial.Equals(ARRIBA))
+                {
+                    cantMovida = destino.Fila - actual.Fila;
+
+                }
+                else
+                {
+                    cantMovida = actual.Fila - destino.Fila;
+                }
+
+                Movimiento movi = new Movimiento();
+                movi.Horizontal = 1;
+                movi.Vertical = 0;
+
+                Celda celdaSubyacenteD = this.getCelda(destino, movi);
+
+                movi.Horizontal = -1;
+
+                Celda celdaSubyacenteI = this.getCelda(destino, movi);
+
+                if (cantMovida == 2 && celdaSubyacenteD != null && celdaSubyacenteD.Pieza != null && celdaSubyacenteD.Pieza is Peon && celdaSubyacenteD.Pieza.Color != pieza.Color)
+                {
+                    Peon peonContrario = (Peon)celdaSubyacenteD.Pieza;
+                    peonContrario.ComerAlPaso = (Peon)pieza;
+                }
+
+                if (cantMovida == 2 && celdaSubyacenteI != null && celdaSubyacenteI.Pieza != null && celdaSubyacenteI.Pieza is Peon && celdaSubyacenteI.Pieza.Color != pieza.Color)
+                {
+                    Peon peonContrario = (Peon)celdaSubyacenteI.Pieza;
+                    peonContrario.ComerAlPaso = (Peon)pieza;
+                }
+
+
+
+                Movimiento mov = new Movimiento();
+                mov.Horizontal = 0;
+                mov.Vertical = -1;
+
+                Celda celdaAnterior = this.getCelda(destino, mov);
+
+                if (celdaAnterior != null && celdaAnterior.Pieza != null && celdaAnterior.Pieza is Peon && celdaAnterior.Pieza.Color != pieza.Color)
+                {
+                    piezaComida = (from Pieza p in piezas
+                                   where p.Equals(celdaAnterior.Pieza)
+                                   select p).FirstOrDefault();
+
+                    piezaComida.Activa = false;
+                    celdaAnterior.Pieza = null;
+                }
+
+                coronacion = this.VerificarCoronacion((Peon)pieza, destino);
+
+            }
+
             string tipo = (!coronacion) ? this.verificarJaqueOJaqueMate(jug, pieza, jugadorRival) : string.Empty;
             partida.ChequearGanador(tipo, jug);
 
@@ -418,7 +464,7 @@ namespace NEGOCIO
             {
                 foreach (Pieza p in piezas)
                 {
-                    if (p.Color != pieza.Color && pieza.Activa == true)
+                    if (p.Color != pieza.Color && p.Activa == true)
                     {
                         Celda celda = this.getCelda(p);
 
@@ -526,7 +572,7 @@ namespace NEGOCIO
                 bool amenaza = false;
                 Celda celdaActualRey = this.getCelda(reyContrario);
 
-                List<Celda> celdaAMoverse = reyContrario.getCeldasDestino(this, celdaActualRey);
+                List<Celda> celdaAMoverse = ((Rey)reyContrario).getCeldasDestino(this, celdaActualRey, true);
 
                 foreach (Pieza pieza in piezas)
                 {
@@ -624,7 +670,7 @@ namespace NEGOCIO
                 {
                     foreach (Pieza p in piezas)
                     {
-                        if (p.Color != pieza.Color && pieza.Activa == true)
+                        if (p.Color != pieza.Color && p.Activa == true)
                         {
                             List<Celda> cel = new List<Celda>();
                             if (p is Rey && !esElContrario)
@@ -641,7 +687,7 @@ namespace NEGOCIO
                                 {
                                     if(!(p is Rey) && !(p is Peon) && !esElContrario)
                                     {
-                                        cel = p.getCeldasDestino(this, this.getCelda(p));
+                                        cel = p.getCeldasDestinoLuegoDeComer(this, this.getCelda(p));
                                     }
                                                                    
                                 }

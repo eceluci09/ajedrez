@@ -55,6 +55,7 @@ namespace NEGOCIO
             this.cargarMovimientos();
             List<Movimiento> movDisp = tablero.VerificarEnroque(this, movimientos);
             movDisp = tablero.VerificarAmenaza(this, movDisp, false);
+
             return base.PosiblesDestinos(tablero, celdaActual, movDisp);
         }
 
@@ -66,11 +67,9 @@ namespace NEGOCIO
             return base.PosiblesDestinos(tablero, celdaActual, movDisp);
         }
 
-        public List<Celda> getCeldasDestinoSinAmenazaNiEnroque(Tablero tablero, Celda celdaActual)
+        public override List<Celda> getCeldasDestinoLuegoDeComer(Tablero tablero, Celda celdaActual)
         {
-            movimientos.Clear();
-            this.cargarMovimientos();
-            return base.PosiblesDestinos(tablero, celdaActual, movimientos);
+            throw new NotImplementedException();
         }
     }
 }

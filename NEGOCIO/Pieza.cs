@@ -42,7 +42,7 @@ namespace NEGOCIO
             set { celdasDisponibles = value; }
         }
 
-        private List<Celda> celdasDispJaqueRey;
+        private List<Celda> celdasDispJaqueRey = new List<Celda>();
 
         public List<Celda> CeldasDispJaqueRey
         {
@@ -102,6 +102,40 @@ namespace NEGOCIO
             return cDisp;
         }
 
+        public List<Celda> PosiblesDestinosLuegoDeComer(Tablero tablero, Celda celdaActual, int incrementoVertical, int incrementoHorizontal)
+        {
+            List<Celda> cDisp = new List<Celda>();
+            bool piezaOFinalTableroEncontrado = false;
+            int horizontal = incrementoHorizontal;
+            int vertical = incrementoVertical;
+            Celda celdaDestino = null;
+
+            while (!piezaOFinalTableroEncontrado)
+            {
+                Movimiento movimiento = new Movimiento();
+                movimiento.Horizontal = horizontal;
+                movimiento.Vertical = vertical;
+
+                celdaDestino = tablero.getCelda(celdaActual, movimiento);
+
+                if (tablero.VerificarCeldaDisponibleLuegoDeComer(celdaDestino, color))
+                {
+                    cDisp.Add(celdaDestino);
+                    celdasDisponibles.Add(celdaDestino);
+                }
+
+                piezaOFinalTableroEncontrado = (celdaDestino == null || celdaDestino.Pieza != null);
+                horizontal += incrementoHorizontal;
+                vertical += incrementoVertical;
+            }
+            //Verifica solo las celdas disponibles que apuntan al Rey contrario
+            if (celdaDestino != null && celdaDestino.Pieza != null && celdaDestino.Pieza is Rey && celdaDestino.Pieza.Color != this.color)
+            {
+                celdasDispJaqueRey = cDisp;
+            }
+            return cDisp;
+        }
+
         public List<Celda> PosiblesDestinos(Tablero tablero, Celda celdaActual, List<Movimiento> movimientos)
         {
             List<Celda> cDisp = new List<Celda>();
@@ -127,7 +161,33 @@ namespace NEGOCIO
 
         }
 
+        public List<Celda> PosiblesDestinosLuegoDeComer(Tablero tablero, Celda celdaActual, List<Movimiento> movimientos)
+        {
+            List<Celda> cDisp = new List<Celda>();
+            foreach (Movimiento movimiento in movimientos)
+            {
+                Celda celdaDestino = tablero.getCelda(celdaActual, movimiento);
+
+                if (tablero.VerificarCeldaDisponibleLuegoDeComer(celdaDestino, color))
+                {
+                    cDisp.Add(celdaDestino);
+                    celdasDisponibles.Add(celdaDestino);
+                }
+
+                //Verifica solo las celdas disponibles que apuntan al Rey contrario
+                if (celdaDestino != null && celdaDestino.Pieza != null && celdaDestino.Pieza is Rey && celdaDestino.Pieza.Color != this.color)
+                {
+                    celdasDispJaqueRey.Add(celdaDestino);
+                }
+
+            }
+            this.celdasDisponibles = cDisp;
+            return cDisp;
+
+        }
+
         public abstract List<Celda> getCeldasDestino(Tablero tablero, Celda celdaActual);
+        public abstract List<Celda> getCeldasDestinoLuegoDeComer(Tablero tablero, Celda celdaActual);
 
         public bool Mover(Tablero tablero, Celda celdaActual, Celda celdaDestino, Jugador jugador)
         {
@@ -168,6 +228,7 @@ namespace NEGOCIO
 
             return celdasDisponibles;
         }
+
 
     }
 }

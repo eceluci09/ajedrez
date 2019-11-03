@@ -42,5 +42,10 @@ namespace NEGOCIO
         {
             return base.PosiblesDestinos(tablero, celdaActual, movimientos);
         }
+
+        public override List<Celda> getCeldasDestinoLuegoDeComer(Tablero tablero, Celda celdaActual)
+        {
+            return base.PosiblesDestinosLuegoDeComer(tablero, celdaActual, movimientos);
+        }
     }
 }

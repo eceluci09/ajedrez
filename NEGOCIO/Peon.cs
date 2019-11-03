@@ -8,6 +8,14 @@ namespace NEGOCIO
 {
     public class Peon : Pieza
     {
+        private Peon comerAlPaso;
+
+        public Peon ComerAlPaso
+        {
+            get { return comerAlPaso; }
+            set { comerAlPaso = value; }
+        }
+
         public Peon(string posicionInicial, bool activa, Color color) : base(posicionInicial, activa, color)
         {
             this.posicionInicial = posicionInicial;
@@ -57,9 +65,33 @@ namespace NEGOCIO
             {
                 celdasDisponibles.Add(celdaDestino);
             }
-            Celda celdaHayPeonContrario = null;
+
+
+            movimiento.Horizontal = 1;
+            movimiento.Vertical = 1;
+
+            celdaDestino = tablero.getCelda(celdaActual, movimiento);
+            if (celdaDestino != null && celdaDestino.Pieza != null && celdaDestino.Pieza.Color != color)
+            {
+                celdasDisponibles.Add(celdaDestino);
+            }
             //Peon al paso
-            if ((this.PosicionInicial.Equals("ARRIBA") && celdaActual.Fila == 5) || (this.PosicionInicial.Equals("ABAJO") && celdaActual.Fila == 4))
+
+            if (comerAlPaso != null)
+            {
+                Celda celdaPeonAComer = tablero.getCelda(comerAlPaso);
+
+                Movimiento movi = new Movimiento();
+                movi.Horizontal = 0;
+                movi.Vertical = -1;
+
+                Celda celdaDisp = tablero.getCelda(celdaPeonAComer, movi);
+
+                celdasDisponibles.Add(celdaDisp);
+
+                comerAlPaso = null;
+            }
+            /*if ((this.PosicionInicial.Equals("ARRIBA") && celdaActual.Fila == 5) || (this.PosicionInicial.Equals("ABAJO") && celdaActual.Fila == 4))
             {
                 movimiento.Horizontal = -1;
                 movimiento.Vertical = 0;
@@ -70,14 +102,6 @@ namespace NEGOCIO
                 celdasDisponibles.Add(celdaDestino);
             }
 
-            movimiento.Horizontal = 1;
-            movimiento.Vertical = 1;
-
-            celdaDestino = tablero.getCelda(celdaActual, movimiento);
-            if (celdaDestino != null && celdaDestino.Pieza != null && celdaDestino.Pieza.Color != color)
-            {
-                celdasDisponibles.Add(celdaDestino);
-            }
             if ((this.PosicionInicial.Equals("ARRIBA") && celdaActual.Fila == 5) || (this.PosicionInicial.Equals("ABAJO") && celdaActual.Fila == 4))
             {
                 movimiento.Horizontal = 1;
@@ -87,7 +111,7 @@ namespace NEGOCIO
             if (celdaHayPeonContrario != null && celdaHayPeonContrario.Pieza != null && celdaHayPeonContrario.Pieza is Peon && celdaHayPeonContrario.Pieza.Color != this.color)
             {
                 celdasDisponibles.Add(celdaDestino);
-            }
+            }*/
 
             return celdasDisponibles;
 
@@ -100,6 +124,11 @@ namespace NEGOCIO
             Movimiento movimiento = new Movimiento();
             movimiento.Horizontal = -1;
             movimiento.Vertical = 1;
+
+            if(celdaActual == null)
+            {
+
+            }
 
             Celda celdaDestino = tablero.getCelda(celdaActual, movimiento);
             if (celdaDestino != null && celdaDestino.Pieza == null)
@@ -118,6 +147,11 @@ namespace NEGOCIO
 
             return celdasDisponibles;
 
+        }
+
+        public override List<Celda> getCeldasDestinoLuegoDeComer(Tablero tablero, Celda celdaActual)
+        {
+            throw new NotImplementedException();
         }
     }
 }

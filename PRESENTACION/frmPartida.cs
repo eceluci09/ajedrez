@@ -146,8 +146,10 @@ namespace PRESENTACION
 
         private void ActualizarTablero(CU_CELDA celdaOrigen, CU_CELDA celdaDestino)
         {
-            celdaOrigen.ActualizarCelda();
-            celdaDestino.ActualizarCelda();
+            foreach(CU_CELDA celda in celdas)
+            {
+                celda.ActualizarCelda();
+            }
         }
 
         private void VerificarMovimientosDisponibles(CU_CELDA CU_celda, Jugador jugadorActivo)
