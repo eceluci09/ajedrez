@@ -64,6 +64,12 @@
     <Compile Include="CU_REGISTRO.Designer.cs">
       <DependentUpon>CU_REGISTRO.cs</DependentUpon>
     </Compile>
+    <Compile Include="CU_TURNO.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CU_TURNO.Designer.cs">
+      <DependentUpon>CU_TURNO.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPartida.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +98,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CU_REGISTRO.resx">
       <DependentUpon>CU_REGISTRO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CU_TURNO.resx">
+      <DependentUpon>CU_TURNO.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPartida.resx">
       <DependentUpon>frmPartida.cs</DependentUpon>
@@ -145,6 +154,9 @@
     <Content Include="Resources\caballo_white.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\jugador.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\peon_black.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

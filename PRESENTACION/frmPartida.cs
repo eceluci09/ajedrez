@@ -65,9 +65,15 @@ namespace PRESENTACION
                 }
             }
 
+            cU_TURNO1.Usuario = partida.Jugador1.Credencial.Username;
+            cU_TURNO2.Usuario = partida.Jugador2.Credencial.Username;
             partida.AsignarTurno();
 
-            foreach(CU_CELDA control in celdas)
+            MarcarJugadorTurnoActivo();
+
+            
+
+            foreach (CU_CELDA control in celdas)
             {
                control.pictureBox.Click += Control_Click;
               
@@ -76,6 +82,20 @@ namespace PRESENTACION
             tablero.InformarJaque += Tablero_InformarJaque;
             tablero.InformarJaqueMate += Tablero_InformarJaqueMate;
 
+        }
+
+        private void MarcarJugadorTurnoActivo()
+        {
+            Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
+            if(jugadorActivo.Credencial.Username.Equals(cU_TURNO1.Usuario))
+            {
+                cU_TURNO1.BackColor = Color.Green;
+                cU_TURNO2.BackColor = Color.Gray;
+            } else
+            {
+                cU_TURNO2.BackColor = Color.Green;
+                cU_TURNO1.BackColor = Color.Gray;
+            }
         }
 
         private void Tablero_InformarJaqueMate(Rey contrario)
@@ -137,6 +157,7 @@ namespace PRESENTACION
                 if(!partida.VerificarDobleTurno(jugadorActivo))
                 {
                     partida.AsignarTurno();
+                    MarcarJugadorTurnoActivo();
                 }
                 
             }
