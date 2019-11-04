@@ -572,7 +572,7 @@ namespace NEGOCIO
                 bool amenaza = false;
                 Celda celdaActualRey = this.getCelda(reyContrario);
 
-                List<Celda> celdaAMoverse = ((Rey)reyContrario).getCeldasDestino(this, celdaActualRey, true);
+                List<Celda> celdaAMoverse = ((Rey)reyContrario).getCeldasDestino(this, celdaActualRey, false);
 
                 foreach (Pieza pieza in piezas)
                 {
