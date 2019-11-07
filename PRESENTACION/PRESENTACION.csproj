@@ -52,6 +52,12 @@
     <Compile Include="CU_CELDA.Designer.cs">
       <DependentUpon>CU_CELDA.cs</DependentUpon>
     </Compile>
+    <Compile Include="CU_CORONA.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CU_CORONA.Designer.cs">
+      <DependentUpon>CU_CORONA.cs</DependentUpon>
+    </Compile>
     <Compile Include="CU_LOGIN.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -92,6 +98,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="CU_CELDA.resx">
       <DependentUpon>CU_CELDA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CU_CORONA.resx">
+      <DependentUpon>CU_CORONA.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CU_LOGIN.resx">
       <DependentUpon>CU_LOGIN.cs</DependentUpon>

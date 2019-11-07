@@ -125,24 +125,31 @@ namespace NEGOCIO
             movimiento.Horizontal = -1;
             movimiento.Vertical = 1;
 
-            if(celdaActual == null)
-            {
-
-            }
-
             Celda celdaDestino = tablero.getCelda(celdaActual, movimiento);
-            if (celdaDestino != null && celdaDestino.Pieza == null)
+            if (celdaDestino != null && (celdaDestino.Pieza == null || celdaDestino.Pieza != null && celdaDestino.Pieza.Color == this.color))
             {
                 celdasDisponibles.Add(celdaDestino);
+            }
+
+            //PRUEBA
+
+            if(celdaDestino != null && celdaDestino.Fila == 6 && celdaDestino.Columna == 8)
+            {
+
             }
 
             movimiento.Horizontal = 1;
             movimiento.Vertical = 1;
 
             celdaDestino = tablero.getCelda(celdaActual, movimiento);
-            if (celdaDestino != null && celdaDestino.Pieza == null)
+            if (celdaDestino != null && (celdaDestino.Pieza == null || celdaDestino.Pieza != null && celdaDestino.Pieza.Color == this.color))
             {
                 celdasDisponibles.Add(celdaDestino);
+            }
+
+            if (celdaDestino != null && celdaDestino.Fila == 6 && celdaDestino.Columna == 8)
+            {
+
             }
 
             return celdasDisponibles;
@@ -151,7 +158,7 @@ namespace NEGOCIO
 
         public override List<Celda> getCeldasDestinoLuegoDeComer(Tablero tablero, Celda celdaActual)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

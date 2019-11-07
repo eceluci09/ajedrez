@@ -13,9 +13,10 @@ namespace PRESENTACION
 {
     public partial class frmPartida : Form
     {
-        List<Jugador> jugadores;
+        public List<Jugador> jugadores;
         Form _principal;
         List<CU_CELDA> celdas = new List<CU_CELDA>();
+        List<CU_CORONA> coronas = new List<CU_CORONA>();
         public frmPartida(Form principal, List<Jugador> jugadores)
         {
             this._principal = principal;
@@ -35,11 +36,17 @@ namespace PRESENTACION
 
         private void FrmPartida_Load(object sender, EventArgs e)
         {
+            this.Reiniciar();
+
+        }
+
+        private void Reiniciar()
+        {
             partida = new Partida();
             tablero = new Tablero();
             tablero.Partida = partida;
 
-            foreach(Celda celda in tablero.Celdas)
+            foreach (Celda celda in tablero.Celdas)
             {
                 CU_CELDA cel = new CU_CELDA();
                 cel.AsignarCelda(celda, panel1);
@@ -53,13 +60,15 @@ namespace PRESENTACION
             //Asigno piezas al jugador 
             //JUGADOR 1: BLANCAS
             //JUGADOR 2: NEGRAS
-            foreach(Pieza pieza in tablero.Piezas)
+            foreach (Pieza pieza in tablero.Piezas)
             {
-                if(pieza.Color == Color.White)
+                if (pieza.Color == Color.White)
                 {
                     partida.Jugador1.Piezas.Add(pieza);
 
-                } else if(pieza.Color == Color.Black) {
+                }
+                else if (pieza.Color == Color.Black)
+                {
 
                     partida.Jugador2.Piezas.Add(pieza);
                 }
@@ -71,17 +80,18 @@ namespace PRESENTACION
 
             MarcarJugadorTurnoActivo();
 
-            
+
 
             foreach (CU_CELDA control in celdas)
             {
-               control.pictureBox.Click += Control_Click;
-              
+                control.pictureBox.Click += Control_Click;
+
             }
 
             tablero.InformarJaque += Tablero_InformarJaque;
             tablero.InformarJaqueMate += Tablero_InformarJaqueMate;
 
+            lblMensaje.Text = string.Empty;
         }
 
         private void MarcarJugadorTurnoActivo()
@@ -98,45 +108,57 @@ namespace PRESENTACION
             }
         }
 
-        private void Tablero_InformarJaqueMate(Rey contrario)
+        private void Tablero_InformarJaqueMate(Rey contrario, Jugador jugador)
         {
-            MessageBox.Show("JAQUE MATE AL REY " + contrario.Color.Name);
+            lblMensaje.Text = "¡JAQUE MATE AL REY " + contrario.Color.Name + "!";
+            lblMensaje.Text += "\n\n";
+            lblMensaje.Text += "GANADOR = " + jugador.Credencial.Username;
         }
 
         private void Tablero_InformarJaque(Rey contrario)
         {
-            MessageBox.Show("JAQUE AL REY " + contrario.Color.Name);
+            lblMensaje.Text = "¡JAQUE AL REY " + contrario.Color.Name + "!";
         }
 
         private void Control_Click(object sender, EventArgs e)
         {
+            
             Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
 
-            
-            CU_CELDA CU_celda = (from CU_CELDA cu_celda in celdas
-                                 where (PictureBox)sender == (cu_celda.pictureBox)
-                                 select cu_celda).FirstOrDefault();
-
-
-            if ((partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 1 && (CU_celda.Celda.Pieza is Torre || CU_celda.Marcado)) || 
-                (partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 0))
+            if (partida.Ganador == null && !partida.Tablas)
             {
-
-                //Verifica si selecciono una pieza o una celda vacia
-
-                if (CU_celda.Celda.Pieza != null && !CU_celda.Marcado)
+                if (jugadorActivo.PiezasCoronacion.Count == 0)
                 {
 
-                    VerificarMovimientosDisponibles(CU_celda, jugadorActivo);
 
+
+                    CU_CELDA CU_celda = (from CU_CELDA cu_celda in celdas
+                                         where (PictureBox)sender == (cu_celda.pictureBox)
+                                         select cu_celda).FirstOrDefault();
+
+
+                    if ((partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 1 && (CU_celda.Celda.Pieza is Torre || CU_celda.Marcado)) ||
+                        (partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 0))
+                    {
+
+                        //Verifica si selecciono una pieza o una celda vacia
+
+                        if (CU_celda.Celda.Pieza != null && !CU_celda.Marcado)
+                        {
+                            lblMensaje.Text = string.Empty;
+                            VerificarMovimientosDisponibles(CU_celda, jugadorActivo);
+
+                        }
+                        else
+                        {
+                            MoverPieza(CU_celda, celdaOrigen, jugadorActivo);
+                        }
+                    }
+                    else
+                    {
+                        LimpiarCeldasDisponibles();
+                    }
                 }
-                else
-                {
-                    MoverPieza(CU_celda, celdaOrigen, jugadorActivo);
-                }
-            } else
-            {
-                LimpiarCeldasDisponibles();
             }
 
             
@@ -149,23 +171,63 @@ namespace PRESENTACION
                 Pieza piezaAMover = celdaOrigen.Celda.Pieza;
                 Celda celdaActual = tablero.getCelda(piezaAMover);
                 jugadorActivo.Mover(piezaAMover, tablero, celdaActual, celdaDestino.Celda);
-
                 LimpiarCeldasDisponibles();
-
-                ActualizarTablero(celdaOrigen, celdaDestino);
-
-                if(!partida.VerificarDobleTurno(jugadorActivo))
+                if (jugadorActivo.PiezasCoronacion.Count > 0)
                 {
-                    partida.AsignarTurno();
-                    MarcarJugadorTurnoActivo();
+                    int posicionX = 0;
+                    foreach (Pieza piezaCorona in jugadorActivo.PiezasCoronacion)
+                    {
+                        CU_CORONA corona = new CU_CORONA();
+                        corona.AsignarPieza(piezaCorona, piezaAMover, jugadorActivo, posicionX, panel2);
+                        
+                        panel2.Controls.Add(corona);
+                        coronas.Add(corona);
+                        corona.pictureBox.Click += PiezaCorona_Click;
+                        posicionX++;
+                    }
+                } else
+                {
+                    ActualizarTablero();
+
+                    if (!partida.VerificarDobleTurno(jugadorActivo) && partida.Ganador == null)
+                    {
+                        partida.AsignarTurno();
+                        MarcarJugadorTurnoActivo();
+                    }
+
+                    if(partida.Ganador != null)
+                    {
+                        partida.Alta();
+                        btnReiniciar.Visible = true;
+                    }
                 }
+
+                
+
+                
                 
             }
 
             
         }
 
-        private void ActualizarTablero(CU_CELDA celdaOrigen, CU_CELDA celdaDestino)
+        private void PiezaCorona_Click(object sender, EventArgs e)
+        {
+            CU_CORONA CU_corona = (from CU_CORONA cu_corona in coronas
+                                 where (PictureBox)sender == (cu_corona.pictureBox)
+                                 select cu_corona).FirstOrDefault();
+
+            tablero.IntercambiarPieza(CU_corona.PiezaCorona, tablero.getCelda(CU_corona.Pieza), CU_corona.Jugador);
+            Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
+            jugadorActivo.PiezasCoronacion.Clear();
+            ActualizarTablero();
+            partida.AsignarTurno();
+            MarcarJugadorTurnoActivo();
+            panel2.Controls.Clear();
+
+        }
+
+        private void ActualizarTablero()
         {
             foreach(CU_CELDA celda in celdas)
             {
@@ -176,7 +238,7 @@ namespace PRESENTACION
         private void VerificarMovimientosDisponibles(CU_CELDA CU_celda, Jugador jugadorActivo)
         {
             //Limpiar celdas disponibles
-
+            bool noMover = false;
             LimpiarCeldasDisponibles();
 
                      
@@ -189,8 +251,63 @@ namespace PRESENTACION
                 Pieza pieza = CU_celda.Celda.Pieza;
                 Celda celda = CU_celda.Celda;
                 List<Celda> celdasDisponibles = pieza.getCeldasDestino(tablero, celda);
+                Pieza reyContrario = null;
+                if (jugadorActivo.Equals(partida.Jugador1))
+                {
+                    reyContrario = (from Pieza rey in partida.Jugador1.Piezas
+                                    where rey is Rey && rey.Activa == true
+                                    select rey).FirstOrDefault();
+                }
+                else
+                {
+                    reyContrario = (from Pieza rey in partida.Jugador2.Piezas
+                                    where rey is Rey && rey.Activa == true
+                                    select rey).FirstOrDefault();
+                }
+
+                Celda celdaRey = tablero.getCelda(reyContrario);
+                foreach(Pieza p in tablero.Piezas)
+                {
+                    if (p.Color != pieza.Color && p.Activa == true)
+                    {
+                        List<Celda> cel = new List<Celda>();
+                        if (p is Rey)
+                        {
+                            cel = ((Rey)p).getCeldasDestino(tablero, tablero.getCelda(p), true);
+                        }
+                        else
+                        {
+                            if (p is Peon)
+                            {
+                                cel = ((Peon)p).getCeldasDestinoRey(tablero, tablero.getCelda(p));
+                            }
+                            else
+                            {
+                                if (!(p is Rey) /*&& !(p is Peon) */)
+                                {
+                                    cel = p.getCeldasDestinoLuegoDeComer(tablero, tablero.getCelda(p));
+                                }
+
+                            }
+                        }
+                        foreach (Celda celdaDisp in cel)
+                        {
+                            if (celdaDisp.Equals(celdaRey))
+                            {
+                                noMover = true;
+
+                            }
+                        }
+
+                    }
+                }
+                if(noMover)
+                {
+                    celdasDisponibles.Clear();
+                }
+
                 if (jugadorActivo.PiezaJaque != null && !(pieza is Rey)) {
-                    celdasDisponibles = pieza.getMovimientosPermitidosEnJaque(tablero, jugadorActivo);
+                celdasDisponibles = pieza.getMovimientosPermitidosEnJaque(tablero, jugadorActivo);
                 }
 
                 foreach (CU_CELDA control in celdas)
@@ -215,6 +332,13 @@ namespace PRESENTACION
             {
                 celdaALimpiar.DesmarcarCeldaDisponible();
             }
+        }
+
+        private void BtnReiniciar_Click(object sender, EventArgs e)
+        {
+            //partida = null;
+            //tablero = null;
+            this.Reiniciar();
         }
     }
 }

@@ -103,35 +103,17 @@ namespace NEGOCIO
             {
                 if(pieza.Mover(tablero, celdaActual, celdaDestino, this))
                 {
-                    bool caballoElegido = false;
-                    bool alfilElegido = false;
-                    bool torreElegida = false;
-                    bool damaElegida = false;
-                    //Saco los peones y el rey como piezas coronadoras
-                    foreach (Pieza piezaCorona in piezas)
-                    {
-                        if(piezaCorona is Caballo && !caballoElegido)
-                        {
-                            caballoElegido = true;
-                            piezasCoronacion.Add(piezaCorona);
-                        }
-                        if (piezaCorona is Alfil && !alfilElegido)
-                        {
-                            alfilElegido = true;
-                            piezasCoronacion.Add(piezaCorona);
-                        }
-                        if (piezaCorona is Torre && !torreElegida)
-                        {
-                            torreElegida = true;
-                            piezasCoronacion.Add(piezaCorona);
-                        }
-                        if (piezaCorona is Reina && !damaElegida)
-                        {
-                            damaElegida = true;
-                            piezasCoronacion.Add(piezaCorona);
-                        }
-                    }
+                    piezasCoronacion.Clear();
+                    Caballo caballo = new Caballo(pieza.PosicionInicial, true, pieza.Color);
+                    piezasCoronacion.Add(caballo);
+                    Reina reina = new Reina(pieza.PosicionInicial, true, pieza.Color);
+                    piezasCoronacion.Add(reina);
+                    Alfil alfil = new Alfil(pieza.PosicionInicial, true, pieza.Color);
+                    piezasCoronacion.Add(alfil);
+                    Torre torre = new Torre(pieza.PosicionInicial, true, pieza.Color);
+                    piezasCoronacion.Add(torre);
                 }
+                
             }
         }
 

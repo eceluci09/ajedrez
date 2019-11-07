@@ -124,7 +124,7 @@ namespace NEGOCIO
                     celdasDisponibles.Add(celdaDestino);
                 }
 
-                piezaOFinalTableroEncontrado = (celdaDestino == null || celdaDestino.Pieza != null);
+                piezaOFinalTableroEncontrado = (celdaDestino == null /*|| celdaDestino.Pieza != null*/);
                 horizontal += incrementoHorizontal;
                 vertical += incrementoVertical;
             }

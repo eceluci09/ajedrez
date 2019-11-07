@@ -30,8 +30,11 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.cU_TURNO1 = new PRESENTACION.CU_TURNO();
             this.cU_TURNO2 = new PRESENTACION.CU_TURNO();
+            this.cU_TURNO1 = new PRESENTACION.CU_TURNO();
+            this.lblMensaje = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.btnReiniciar = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -51,29 +54,60 @@
             this.panel1.Size = new System.Drawing.Size(581, 566);
             this.panel1.TabIndex = 1;
             // 
-            // cU_TURNO1
-            // 
-            this.cU_TURNO1.BackColor = System.Drawing.Color.Gray;
-            this.cU_TURNO1.Location = new System.Drawing.Point(645, 90);
-            this.cU_TURNO1.Name = "cU_TURNO1";
-            this.cU_TURNO1.Size = new System.Drawing.Size(306, 111);
-            this.cU_TURNO1.TabIndex = 2;
-            this.cU_TURNO1.Usuario = "label2";
-            // 
             // cU_TURNO2
             // 
             this.cU_TURNO2.BackColor = System.Drawing.Color.Gray;
             this.cU_TURNO2.Location = new System.Drawing.Point(645, 196);
             this.cU_TURNO2.Name = "cU_TURNO2";
-            this.cU_TURNO2.Size = new System.Drawing.Size(306, 110);
+            this.cU_TURNO2.Size = new System.Drawing.Size(306, 95);
             this.cU_TURNO2.TabIndex = 3;
             this.cU_TURNO2.Usuario = "label2";
+            // 
+            // cU_TURNO1
+            // 
+            this.cU_TURNO1.BackColor = System.Drawing.Color.Gray;
+            this.cU_TURNO1.Location = new System.Drawing.Point(645, 86);
+            this.cU_TURNO1.Name = "cU_TURNO1";
+            this.cU_TURNO1.Size = new System.Drawing.Size(306, 95);
+            this.cU_TURNO1.TabIndex = 2;
+            this.cU_TURNO1.Usuario = "label2";
+            // 
+            // lblMensaje
+            // 
+            this.lblMensaje.AutoSize = true;
+            this.lblMensaje.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMensaje.Location = new System.Drawing.Point(640, 319);
+            this.lblMensaje.Name = "lblMensaje";
+            this.lblMensaje.Size = new System.Drawing.Size(76, 25);
+            this.lblMensaje.TabIndex = 4;
+            this.lblMensaje.Text = "label1";
+            // 
+            // panel2
+            // 
+            this.panel2.Location = new System.Drawing.Point(602, 462);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(392, 116);
+            this.panel2.TabIndex = 5;
+            // 
+            // btnReiniciar
+            // 
+            this.btnReiniciar.Location = new System.Drawing.Point(645, 416);
+            this.btnReiniciar.Name = "btnReiniciar";
+            this.btnReiniciar.Size = new System.Drawing.Size(132, 40);
+            this.btnReiniciar.TabIndex = 6;
+            this.btnReiniciar.Text = "REINICIAR";
+            this.btnReiniciar.UseVisualStyleBackColor = true;
+            this.btnReiniciar.Visible = false;
+            this.btnReiniciar.Click += new System.EventHandler(this.BtnReiniciar_Click);
             // 
             // frmPartida
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1006, 606);
+            this.Controls.Add(this.btnReiniciar);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.lblMensaje);
             this.Controls.Add(this.cU_TURNO2);
             this.Controls.Add(this.cU_TURNO1);
             this.Controls.Add(this.panel1);
@@ -82,6 +116,7 @@
             this.Text = "frmPartida";
             this.Load += new System.EventHandler(this.FrmPartida_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -91,5 +126,8 @@
         private System.Windows.Forms.Panel panel1;
         private CU_TURNO cU_TURNO1;
         private CU_TURNO cU_TURNO2;
+        private System.Windows.Forms.Label lblMensaje;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Button btnReiniciar;
     }
 }

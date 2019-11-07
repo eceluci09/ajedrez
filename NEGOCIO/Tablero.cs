@@ -18,8 +18,8 @@ namespace NEGOCIO
         public delegate void delInformarJaque(Rey contrario);
         public event delInformarJaque InformarJaque;
 
-        public delegate void delInformarJaqueMate(Rey contrario);
-        public event delInformarJaque InformarJaqueMate;
+        public delegate void delInformarJaqueMate(Rey contrario, Jugador jugadorUltMov);
+        public event delInformarJaqueMate InformarJaqueMate;
 
         private List<Pieza> piezas = new List<Pieza>();
 
@@ -173,7 +173,7 @@ namespace NEGOCIO
         {
             if (celda == null) return false;
 
-            return (celda.Pieza == null || celda.Pieza.Color == color);
+            return (celda.Pieza == null /*|| (celda.Pieza.Color == color*/);
         }
 
         public Celda getCelda(Pieza pieza)
@@ -320,25 +320,28 @@ namespace NEGOCIO
                     peonContrario.ComerAlPaso = (Peon)pieza;
                 }
 
-
-
-                Movimiento mov = new Movimiento();
-                mov.Horizontal = 0;
-                mov.Vertical = -1;
-
-                Celda celdaAnterior = this.getCelda(destino, mov);
-
-                if (celdaAnterior != null && celdaAnterior.Pieza != null && celdaAnterior.Pieza is Peon && celdaAnterior.Pieza.Color != pieza.Color)
+                coronacion = this.VerificarCoronacion((Peon)pieza, destino);
+                if (!coronacion)
                 {
-                    piezaComida = (from Pieza p in piezas
-                                   where p.Equals(celdaAnterior.Pieza)
-                                   select p).FirstOrDefault();
 
-                    piezaComida.Activa = false;
-                    celdaAnterior.Pieza = null;
+                    Movimiento mov = new Movimiento();
+                    mov.Horizontal = 0;
+                    mov.Vertical = -1;
+
+                    Celda celdaAnterior = this.getCelda(destino, mov);
+
+                    if (celdaAnterior != null && celdaAnterior.Pieza != null && celdaAnterior.Pieza is Peon && celdaAnterior.Pieza.Color != pieza.Color)
+                    {
+                        piezaComida = (from Pieza p in piezas
+                                       where p.Equals(celdaAnterior.Pieza)
+                                       select p).FirstOrDefault();
+
+                        piezaComida.Activa = false;
+                        celdaAnterior.Pieza = null;
+                    }
                 }
 
-                coronacion = this.VerificarCoronacion((Peon)pieza, destino);
+                
 
             }
 
@@ -356,17 +359,21 @@ namespace NEGOCIO
             {
                 if (jug.Equals(partida.Jugador1))
                 {
-                    piezaIntercambiada = (from Pieza p in partida.Jugador2.Piezas
+                    piezaIntercambiada = (from Pieza p in partida.Jugador1.Piezas
                                    where p.Equals(destino.Pieza)
                                    select p).FirstOrDefault();
+
+                    partida.Jugador1.Piezas.Add(pieza);
 
                     jugadorRival = partida.Jugador2;
                 }
                 else
                 {
-                    piezaIntercambiada = (from Pieza p in partida.Jugador1.Piezas
+                    piezaIntercambiada = (from Pieza p in partida.Jugador2.Piezas
                                    where p.Equals(destino.Pieza)
                                    select p).FirstOrDefault();
+
+                    partida.Jugador2.Piezas.Add(pieza);
 
                     jugadorRival = partida.Jugador1;
                 }
@@ -377,10 +384,14 @@ namespace NEGOCIO
                                where p.Equals(piezaIntercambiada)
                                select p).FirstOrDefault();
 
+                piezas.Add(pieza);
+
                 piezaIntercambiada.Activa = false;
             }
             destino.Pieza = pieza;
             partida.RegistrarMovimiento(null, destino);
+            string tipo = this.verificarJaqueOJaqueMate(jug, pieza, jugadorRival);
+            partida.ChequearGanador(tipo, jug);
 
         }
 
@@ -600,8 +611,27 @@ namespace NEGOCIO
                         this.InformarJaque((Rey)reyContrario);
                     } else
                     {
-                        tipo = "JAQUE MATE";
-                        this.InformarJaqueMate((Rey)reyContrario);
+                        foreach(Pieza p in piezas)
+                        {
+                            if(piezaUltMov.Color != p.Color && p.Activa == true && !(p is Rey))
+                            {
+                                List<Celda> celdasAMover = p.getCeldasDestino(this, this.getCelda(p));
+                                if(p.getMovimientosPermitidosEnJaque(this, jugadorRival).Count > 0)
+                                {
+                                    tipo = "JAQUE";
+                                }
+                            }
+                        }
+
+                        if (tipo.Equals("JAQUE"))
+                        {
+                            this.InformarJaque((Rey)reyContrario);
+                        }
+                        else
+                        {
+                            tipo = "JAQUE MATE";
+                            this.InformarJaqueMate((Rey)reyContrario, jugUltMov);
+                        }
                     }
                 }
 
@@ -685,7 +715,7 @@ namespace NEGOCIO
                                 }
                                 else
                                 {
-                                    if(!(p is Rey) && !(p is Peon) && !esElContrario)
+                                    if(!(p is Rey) /*&& !(p is Peon) */&& !esElContrario)
                                     {
                                         cel = p.getCeldasDestinoLuegoDeComer(this, this.getCelda(p));
                                     }
