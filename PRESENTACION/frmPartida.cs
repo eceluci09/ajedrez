@@ -17,6 +17,7 @@ namespace PRESENTACION
         Form _principal;
         List<CU_CELDA> celdas = new List<CU_CELDA>();
         List<CU_CORONA> coronas = new List<CU_CORONA>();
+
         public frmPartida(Form principal, List<Jugador> jugadores)
         {
             this._principal = principal;
@@ -36,9 +37,18 @@ namespace PRESENTACION
 
         private void FrmPartida_Load(object sender, EventArgs e)
         {
+            cU_TURNO1.PedirTablas.Click += PedirTablas_Click;
+            cU_TURNO1.AceptarTablas.Click += AceptarTablas_Click;
+            cU_TURNO1.RechazarTablas.Click += RechazarTablas_Click;
+
+            cU_TURNO2.PedirTablas.Click += PedirTablas_Click1;
+            cU_TURNO2.AceptarTablas.Click += AceptarTablas_Click1;
+            cU_TURNO2.RechazarTablas.Click += RechazarTablas_Click1;
             this.Reiniciar(jugadores);
 
         }
+
+        
 
         private void Reiniciar(List<Jugador> jug)
         {
@@ -78,6 +88,8 @@ namespace PRESENTACION
 
             cU_TURNO1.Usuario = partida.Jugador1.Credencial.Username;
             cU_TURNO2.Usuario = partida.Jugador2.Credencial.Username;
+            
+
             partida.AsignarTurno();
 
             MarcarJugadorTurnoActivo();
@@ -98,6 +110,67 @@ namespace PRESENTACION
             btnReiniciar.Visible = false;
         }
 
+        private void RechazarTablas_Click(object sender, EventArgs e)
+        {
+            cU_TURNO1.AceptarTablas.Visible = false;
+            cU_TURNO1.RechazarTablas.Visible = false;
+            cU_TURNO2.PedirTablas.Visible = false;
+            button2.Visible = false;
+        }
+
+        private void AceptarTablas_Click(object sender, EventArgs e)
+        {
+            partida.Jugador1.AceptarTablas(tablero);
+            cU_TURNO1.AceptarTablas.Visible = false;
+            cU_TURNO1.RechazarTablas.Visible = false;
+            cU_TURNO2.PedirTablas.Visible = false;
+            partida.Alta();
+            partida.Jugador1.ActualizarPartidasEmpatadas();
+            partida.Jugador2.ActualizarPartidasEmpatadas();
+            lblMensaje.Text = "PARTIDA EMPATADA POR TABLAS";
+            btnReiniciar.Visible = true;
+            button2.Visible = false;
+
+        }
+
+        private void PedirTablas_Click(object sender, EventArgs e)
+        {
+            partida.Jugador1.OfrecerTablas();
+            cU_TURNO2.AceptarTablas.Visible = true;
+            cU_TURNO2.RechazarTablas.Visible = true;
+            button2.Visible = false;
+        }
+
+        private void RechazarTablas_Click1(object sender, EventArgs e)
+        {
+            cU_TURNO2.AceptarTablas.Visible = false;
+            cU_TURNO2.RechazarTablas.Visible = false;
+            cU_TURNO1.PedirTablas.Visible = false;
+            button2.Visible = false;
+        }
+
+        private void AceptarTablas_Click1(object sender, EventArgs e)
+        {
+            partida.Jugador2.AceptarTablas(tablero);
+            cU_TURNO2.AceptarTablas.Visible = false;
+            cU_TURNO2.RechazarTablas.Visible = false;
+            cU_TURNO1.PedirTablas.Visible = false;
+            partida.Alta();
+            partida.Jugador1.ActualizarPartidasEmpatadas();
+            partida.Jugador2.ActualizarPartidasEmpatadas();
+            lblMensaje.Text = "PARTIDA EMPATADA POR TABLAS";
+            btnReiniciar.Visible = true;
+            button2.Visible = false;
+        }
+
+        private void PedirTablas_Click1(object sender, EventArgs e)
+        {
+            partida.Jugador2.OfrecerTablas();
+            cU_TURNO1.AceptarTablas.Visible = true;
+            cU_TURNO1.RechazarTablas.Visible = true;
+            button2.Visible = false;
+        }
+
         private void MarcarJugadorTurnoActivo()
         {
             Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
@@ -105,10 +178,26 @@ namespace PRESENTACION
             {
                 cU_TURNO1.BackColor = Color.DarkTurquoise;
                 cU_TURNO2.BackColor = Color.Gray;
+
+                cU_TURNO1.PedirTablas.Visible = true;
+                cU_TURNO1.AceptarTablas.Visible = false;
+                cU_TURNO1.RechazarTablas.Visible = false;
+
+                cU_TURNO2.PedirTablas.Visible = false;
+                cU_TURNO2.AceptarTablas.Visible = false;
+                cU_TURNO2.RechazarTablas.Visible = false;
             } else
             {
                 cU_TURNO2.BackColor = Color.DarkTurquoise;
                 cU_TURNO1.BackColor = Color.Gray;
+
+                cU_TURNO2.PedirTablas.Visible = true;
+                cU_TURNO2.AceptarTablas.Visible = false;
+                cU_TURNO2.RechazarTablas.Visible = false;
+
+                cU_TURNO1.PedirTablas.Visible = false;
+                cU_TURNO1.AceptarTablas.Visible = false;
+                cU_TURNO1.RechazarTablas.Visible = false;
             }
         }
 
@@ -127,41 +216,52 @@ namespace PRESENTACION
 
         private void Control_Click(object sender, EventArgs e)
         {
-            
-            Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
-
-            if (partida.Ganador == null && !partida.Tablas)
+            if (!cU_TURNO1.AceptarTablas.Visible && !cU_TURNO2.AceptarTablas.Visible)
             {
-                if (jugadorActivo.PiezasCoronacion.Count == 0)
+                Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
+
+                if (partida.Ganador == null && !partida.Tablas)
                 {
-
-
-
-                    CU_CELDA CU_celda = (from CU_CELDA cu_celda in celdas
-                                         where (PictureBox)sender == (cu_celda.pictureBox)
-                                         select cu_celda).FirstOrDefault();
-
-
-                    if ((partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 1 && (CU_celda.Celda.Pieza is Torre || CU_celda.Marcado)) ||
-                        (partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 0))
+                    if (jugadorActivo.PiezasCoronacion.Count == 0)
                     {
 
-                        //Verifica si selecciono una pieza o una celda vacia
 
-                        if (CU_celda.Celda.Pieza != null && !CU_celda.Marcado)
+
+                        CU_CELDA CU_celda = (from CU_CELDA cu_celda in celdas
+                                             where (PictureBox)sender == (cu_celda.pictureBox)
+                                             select cu_celda).FirstOrDefault();
+
+
+                        if ((partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 1 && (CU_celda.Celda.Pieza is Torre || CU_celda.Marcado)) ||
+                            (partida.VerificarMovimientosJugadorActivo(jugadorActivo) == 0))
                         {
-                            lblMensaje.Text = string.Empty;
-                            VerificarMovimientosDisponibles(CU_celda, jugadorActivo);
 
+                            //Verifica si selecciono una pieza o una celda vacia
+
+                            if (CU_celda.Celda.Pieza != null && !CU_celda.Marcado)
+                            {
+                                cU_TURNO1.PedirTablas.Visible = false;
+                                cU_TURNO1.AceptarTablas.Visible = false;
+                                cU_TURNO1.RechazarTablas.Visible = false;
+
+                                cU_TURNO2.PedirTablas.Visible = false;
+                                cU_TURNO2.AceptarTablas.Visible = false;
+                                cU_TURNO2.RechazarTablas.Visible = false;
+
+
+                                lblMensaje.Text = string.Empty;
+                                VerificarMovimientosDisponibles(CU_celda, jugadorActivo);
+
+                            }
+                            else
+                            {
+                                MoverPieza(CU_celda, celdaOrigen, jugadorActivo);
+                            }
                         }
                         else
                         {
-                            MoverPieza(CU_celda, celdaOrigen, jugadorActivo);
+                            LimpiarCeldasDisponibles();
                         }
-                    }
-                    else
-                    {
-                        LimpiarCeldasDisponibles();
                     }
                 }
             }
@@ -211,11 +311,7 @@ namespace PRESENTACION
                         {
                             partida.Jugador1.ActualizarPartidasPerdidas();
                         }
-                        if(partida.Tablas)
-                        {
-                            partida.Jugador1.ActualizarPartidasEmpatadas();
-                            partida.Jugador2.ActualizarPartidasEmpatadas();
-                        }
+                        
                         btnReiniciar.Visible = true;
                     }
                 }
@@ -304,6 +400,39 @@ namespace PRESENTACION
             coronas.Clear();
             
             this.Reiniciar(partida.recargarJugadoresPartida());
+        }
+
+        private void Button2_Click(object sender, EventArgs e)
+        {
+            Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
+            if (jugadorActivo.Equals(partida.Jugador1)) {
+                partida.SetGanador(partida.Jugador2);
+                lblMensaje.Text = "GANADOR = " + partida.Jugador2.Credencial.Username;
+                lblMensaje.Text += "\n";
+                lblMensaje.Text += "POR ABANDONO";
+                partida.Jugador1.ActualizarPartidasPerdidas();
+            } else
+            {
+                partida.SetGanador(partida.Jugador1);
+                lblMensaje.Text = "GANADOR = " + partida.Jugador1.Credencial.Username;
+                lblMensaje.Text += "\n";
+                lblMensaje.Text += "POR ABANDONO";
+                partida.Jugador2.ActualizarPartidasPerdidas();
+            }
+
+            partida.Ganador.ActualizarPartidasGanadas();
+
+            btnReiniciar.Visible = true;
+            button2.Visible = false;
+
+            cU_TURNO1.PedirTablas.Visible = false;
+            cU_TURNO1.AceptarTablas.Visible = false;
+            cU_TURNO1.RechazarTablas.Visible = false;
+
+            cU_TURNO2.PedirTablas.Visible = false;
+            cU_TURNO2.AceptarTablas.Visible = false;
+            cU_TURNO2.RechazarTablas.Visible = false;
+
         }
     }
 }

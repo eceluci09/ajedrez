@@ -25,9 +25,35 @@ namespace PRESENTACION
             set { label2.Text = value; }
         }
 
+        private Button pedirTablas;
+        public Button PedirTablas
+        {
+            get { return button1; }
+            set { button1 = value; }
+        }
+
+        private Button aceptarTablas;
+
+        public Button AceptarTablas
+        {
+            get { return button2; }
+            set { button2 = value; }
+        }
+
+        private Button rechazarTablas;
+
+        public Button RechazarTablas
+        {
+            get { return button3; }
+            set { button3 = value; }
+        }
+
+
         private void CU_TURNO_Load(object sender, EventArgs e)
         {
             this.BackColor = Color.Gray;
         }
+
+        
     }
 }

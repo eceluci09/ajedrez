@@ -210,7 +210,7 @@ namespace NEGOCIO
                 parametros.Add(acceso.CrearParametro("@idGanador", ganador.Id));
             } else
             {
-                parametros.Add(acceso.CrearParametro("@idGanador", null));
+                parametros.Add(acceso.CrearParametro("@idGanador", 0));
             }
 
             parametros.Add(acceso.CrearParametro("@tablas", this.tablas == true ? 1 : 0));

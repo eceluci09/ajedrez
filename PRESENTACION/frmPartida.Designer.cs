@@ -30,16 +30,17 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.cU_TURNO2 = new PRESENTACION.CU_TURNO();
-            this.cU_TURNO1 = new PRESENTACION.CU_TURNO();
             this.lblMensaje = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnReiniciar = new System.Windows.Forms.Button();
+            this.cU_TURNO2 = new PRESENTACION.CU_TURNO();
+            this.cU_TURNO1 = new PRESENTACION.CU_TURNO();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(675, 12);
+            this.button1.Location = new System.Drawing.Point(664, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(113, 37);
             this.button1.TabIndex = 0;
@@ -54,31 +55,13 @@
             this.panel1.Size = new System.Drawing.Size(581, 566);
             this.panel1.TabIndex = 1;
             // 
-            // cU_TURNO2
-            // 
-            this.cU_TURNO2.BackColor = System.Drawing.Color.Gray;
-            this.cU_TURNO2.Location = new System.Drawing.Point(645, 196);
-            this.cU_TURNO2.Name = "cU_TURNO2";
-            this.cU_TURNO2.Size = new System.Drawing.Size(306, 95);
-            this.cU_TURNO2.TabIndex = 3;
-            this.cU_TURNO2.Usuario = "label2";
-            // 
-            // cU_TURNO1
-            // 
-            this.cU_TURNO1.BackColor = System.Drawing.Color.Gray;
-            this.cU_TURNO1.Location = new System.Drawing.Point(645, 86);
-            this.cU_TURNO1.Name = "cU_TURNO1";
-            this.cU_TURNO1.Size = new System.Drawing.Size(306, 95);
-            this.cU_TURNO1.TabIndex = 2;
-            this.cU_TURNO1.Usuario = "label2";
-            // 
             // lblMensaje
             // 
             this.lblMensaje.AutoSize = true;
             this.lblMensaje.BackColor = System.Drawing.Color.Black;
             this.lblMensaje.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblMensaje.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.lblMensaje.Location = new System.Drawing.Point(640, 319);
+            this.lblMensaje.Location = new System.Drawing.Point(599, 340);
             this.lblMensaje.Name = "lblMensaje";
             this.lblMensaje.Size = new System.Drawing.Size(76, 25);
             this.lblMensaje.TabIndex = 4;
@@ -86,7 +69,7 @@
             // 
             // panel2
             // 
-            this.panel2.Location = new System.Drawing.Point(602, 462);
+            this.panel2.Location = new System.Drawing.Point(602, 476);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(392, 116);
             this.panel2.TabIndex = 5;
@@ -105,32 +88,43 @@
             // cU_TURNO2
             // 
             this.cU_TURNO2.BackColor = System.Drawing.Color.Gray;
-            this.cU_TURNO2.Location = new System.Drawing.Point(645, 196);
+            this.cU_TURNO2.Location = new System.Drawing.Point(645, 191);
             this.cU_TURNO2.Name = "cU_TURNO2";
-            this.cU_TURNO2.Size = new System.Drawing.Size(306, 95);
-            this.cU_TURNO2.TabIndex = 3;
+            this.cU_TURNO2.Size = new System.Drawing.Size(322, 130);
+            this.cU_TURNO2.TabIndex = 8;
             this.cU_TURNO2.Usuario = "label2";
             // 
             // cU_TURNO1
             // 
             this.cU_TURNO1.BackColor = System.Drawing.Color.Gray;
-            this.cU_TURNO1.Location = new System.Drawing.Point(645, 86);
+            this.cU_TURNO1.Location = new System.Drawing.Point(645, 55);
             this.cU_TURNO1.Name = "cU_TURNO1";
-            this.cU_TURNO1.Size = new System.Drawing.Size(306, 95);
-            this.cU_TURNO1.TabIndex = 2;
+            this.cU_TURNO1.Size = new System.Drawing.Size(322, 130);
+            this.cU_TURNO1.TabIndex = 7;
             this.cU_TURNO1.Usuario = "label2";
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(800, 416);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(118, 40);
+            this.button2.TabIndex = 9;
+            this.button2.Text = "ABANDONAR";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.Button2_Click);
             // 
             // frmPartida
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(1006, 606);
+            this.ClientSize = new System.Drawing.Size(1006, 623);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.cU_TURNO2);
+            this.Controls.Add(this.cU_TURNO1);
             this.Controls.Add(this.btnReiniciar);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.lblMensaje);
-            this.Controls.Add(this.cU_TURNO2);
-            this.Controls.Add(this.cU_TURNO1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button1);
             this.Name = "frmPartida";
@@ -145,10 +139,11 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel1;
-        private CU_TURNO cU_TURNO1;
-        private CU_TURNO cU_TURNO2;
         private System.Windows.Forms.Label lblMensaje;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnReiniciar;
+        private CU_TURNO cU_TURNO1;
+        private CU_TURNO cU_TURNO2;
+        private System.Windows.Forms.Button button2;
     }
 }
