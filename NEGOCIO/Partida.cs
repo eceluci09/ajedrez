@@ -76,6 +76,7 @@ namespace NEGOCIO
             jugador2 = jugadores[1];
 
             this.activa = true;
+            this.tablas = false;
         }
 
         public void AsignarTurno()
@@ -176,12 +177,27 @@ namespace NEGOCIO
             movimientos.Add(movimiento);
         }
 
-        public void ChequearGanador(string tipo, Jugador jugActual)
+        public List<Jugador> recargarJugadoresPartida()
         {
-            if(tipo.Equals("JAQUE MATE"))
-            {
-                this.ganador = jugActual;
-            }
+            List<Jugador> jugadores = new List<Jugador>();
+            jugador1.Piezas.Clear();
+            jugador1.PiezasCoronacion.Clear();
+            jugador1.PidioTablas = false;
+            jugador1.PiezaJaque.Clear();
+            jugador2.Piezas.Clear();
+            jugador2.PiezasCoronacion.Clear();
+            jugador2.PidioTablas = false;
+            jugador2.PiezaJaque.Clear();
+            jugadores.Add(jugador1);
+            jugadores.Add(jugador2);
+
+            return jugadores;
+        }
+
+        public void SetGanador(Jugador jugActual)
+        {
+           this.ganador = jugActual;
+           
         }
 
         public int Alta()
@@ -191,7 +207,7 @@ namespace NEGOCIO
             parametros.Add(acceso.CrearParametro("@idJugador2", jugador2.Id));
             if (ganador != null)
             {
-                parametros.Add(acceso.CrearParametro("@idJugador2", jugador2.Id));
+                parametros.Add(acceso.CrearParametro("@idGanador", ganador.Id));
             } else
             {
                 parametros.Add(acceso.CrearParametro("@idGanador", null));

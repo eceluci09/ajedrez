@@ -161,7 +161,8 @@ namespace NEGOCIO
                 for (int j = 0; j < 8; j++)
                 {
                     Celda celda = new Celda();
-                    celda.Color = (i + j) % 2 == 0 ? Color.FromArgb(145, 29, 19) : Color.FromArgb(233, 255, 95);
+               //     celda.Color = (i + j) % 2 == 0 ? Color.FromArgb(145, 29, 19) : Color.FromArgb(233, 255, 95);
+                    celda.Color = (i + j) % 2 == 0 ? Color.Brown: Color.DarkTurquoise;
                     celda.Fila = i + 1;
                     celda.Columna = j + 1;
                     celdas.Add(celda);
@@ -173,7 +174,7 @@ namespace NEGOCIO
         {
             if (celda == null) return false;
 
-            return (celda.Pieza == null /*|| (celda.Pieza.Color == color*/);
+            return (celda.Pieza == null || (celda.Pieza.Color == color || celda.Pieza.Color != color));
         }
 
         public Celda getCelda(Pieza pieza)
@@ -276,7 +277,10 @@ namespace NEGOCIO
                 piezaComida.Activa = false;
             }
             
-            
+            if(destino.Pieza is Rey) {
+                Rey r = (Rey)destino.Pieza;
+                this.InformarJaqueMate(r, jug);
+            }
 
             destino.Pieza = pieza;
             partida.RegistrarMovimiento(actual, destino);
@@ -345,8 +349,9 @@ namespace NEGOCIO
 
             }
 
+
             string tipo = (!coronacion) ? this.verificarJaqueOJaqueMate(jug, pieza, jugadorRival) : string.Empty;
-            partida.ChequearGanador(tipo, jug);
+            //partida.ChequearGanador(tipo, jug);
 
             return coronacion;
         }
@@ -391,7 +396,7 @@ namespace NEGOCIO
             destino.Pieza = pieza;
             partida.RegistrarMovimiento(null, destino);
             string tipo = this.verificarJaqueOJaqueMate(jug, pieza, jugadorRival);
-            partida.ChequearGanador(tipo, jug);
+            //partida.ChequearGanador(tipo, jug);
 
         }
 

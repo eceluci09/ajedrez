@@ -67,7 +67,8 @@ namespace ACCESOADATOS
             {
                 filas = comando.ExecuteNonQuery();
             }
-            catch { filas = -1; }
+            catch(Exception ex)
+            { filas = -1; }
             Cerrar();
             return filas;
         }

@@ -36,12 +36,14 @@ namespace PRESENTACION
 
         private void FrmPartida_Load(object sender, EventArgs e)
         {
-            this.Reiniciar();
+            this.Reiniciar(jugadores);
 
         }
 
-        private void Reiniciar()
+        private void Reiniciar(List<Jugador> jug)
         {
+            partida = null;
+            tablero = null;
             partida = new Partida();
             tablero = new Tablero();
             tablero.Partida = partida;
@@ -55,7 +57,7 @@ namespace PRESENTACION
                 celdas.Add(cel);
             }
 
-            partida.Iniciar(jugadores);
+            partida.Iniciar(jug);
 
             //Asigno piezas al jugador 
             //JUGADOR 1: BLANCAS
@@ -92,6 +94,8 @@ namespace PRESENTACION
             tablero.InformarJaqueMate += Tablero_InformarJaqueMate;
 
             lblMensaje.Text = string.Empty;
+
+            btnReiniciar.Visible = false;
         }
 
         private void MarcarJugadorTurnoActivo()
@@ -99,11 +103,11 @@ namespace PRESENTACION
             Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
             if(jugadorActivo.Credencial.Username.Equals(cU_TURNO1.Usuario))
             {
-                cU_TURNO1.BackColor = Color.Green;
+                cU_TURNO1.BackColor = Color.DarkTurquoise;
                 cU_TURNO2.BackColor = Color.Gray;
             } else
             {
-                cU_TURNO2.BackColor = Color.Green;
+                cU_TURNO2.BackColor = Color.DarkTurquoise;
                 cU_TURNO1.BackColor = Color.Gray;
             }
         }
@@ -113,6 +117,7 @@ namespace PRESENTACION
             lblMensaje.Text = "¡JAQUE MATE AL REY " + contrario.Color.Name + "!";
             lblMensaje.Text += "\n\n";
             lblMensaje.Text += "GANADOR = " + jugador.Credencial.Username;
+            partida.SetGanador(jugador);
         }
 
         private void Tablero_InformarJaque(Rey contrario)
@@ -195,9 +200,22 @@ namespace PRESENTACION
                         MarcarJugadorTurnoActivo();
                     }
 
-                    if(partida.Ganador != null)
+                    if(partida.Ganador != null || partida.Tablas)
                     {
                         partida.Alta();
+                        partida.Ganador.ActualizarPartidasGanadas();
+                        if(partida.Ganador.Equals(partida.Jugador1))
+                        {
+                            partida.Jugador2.ActualizarPartidasPerdidas();
+                        } else
+                        {
+                            partida.Jugador1.ActualizarPartidasPerdidas();
+                        }
+                        if(partida.Tablas)
+                        {
+                            partida.Jugador1.ActualizarPartidasEmpatadas();
+                            partida.Jugador2.ActualizarPartidasEmpatadas();
+                        }
                         btnReiniciar.Visible = true;
                     }
                 }
@@ -238,7 +256,6 @@ namespace PRESENTACION
         private void VerificarMovimientosDisponibles(CU_CELDA CU_celda, Jugador jugadorActivo)
         {
             //Limpiar celdas disponibles
-            bool noMover = false;
             LimpiarCeldasDisponibles();
 
                      
@@ -251,60 +268,6 @@ namespace PRESENTACION
                 Pieza pieza = CU_celda.Celda.Pieza;
                 Celda celda = CU_celda.Celda;
                 List<Celda> celdasDisponibles = pieza.getCeldasDestino(tablero, celda);
-                Pieza reyContrario = null;
-                if (jugadorActivo.Equals(partida.Jugador1))
-                {
-                    reyContrario = (from Pieza rey in partida.Jugador1.Piezas
-                                    where rey is Rey && rey.Activa == true
-                                    select rey).FirstOrDefault();
-                }
-                else
-                {
-                    reyContrario = (from Pieza rey in partida.Jugador2.Piezas
-                                    where rey is Rey && rey.Activa == true
-                                    select rey).FirstOrDefault();
-                }
-
-                Celda celdaRey = tablero.getCelda(reyContrario);
-                foreach(Pieza p in tablero.Piezas)
-                {
-                    if (p.Color != pieza.Color && p.Activa == true)
-                    {
-                        List<Celda> cel = new List<Celda>();
-                        if (p is Rey)
-                        {
-                            cel = ((Rey)p).getCeldasDestino(tablero, tablero.getCelda(p), true);
-                        }
-                        else
-                        {
-                            if (p is Peon)
-                            {
-                                cel = ((Peon)p).getCeldasDestinoRey(tablero, tablero.getCelda(p));
-                            }
-                            else
-                            {
-                                if (!(p is Rey) /*&& !(p is Peon) */)
-                                {
-                                    cel = p.getCeldasDestinoLuegoDeComer(tablero, tablero.getCelda(p));
-                                }
-
-                            }
-                        }
-                        foreach (Celda celdaDisp in cel)
-                        {
-                            if (celdaDisp.Equals(celdaRey))
-                            {
-                                noMover = true;
-
-                            }
-                        }
-
-                    }
-                }
-                if(noMover)
-                {
-                    celdasDisponibles.Clear();
-                }
 
                 if (jugadorActivo.PiezaJaque != null && !(pieza is Rey)) {
                 celdasDisponibles = pieza.getMovimientosPermitidosEnJaque(tablero, jugadorActivo);
@@ -336,9 +299,11 @@ namespace PRESENTACION
 
         private void BtnReiniciar_Click(object sender, EventArgs e)
         {
-            //partida = null;
-            //tablero = null;
-            this.Reiniciar();
+            panel1.Controls.Clear();
+            celdas.Clear();
+            coronas.Clear();
+            
+            this.Reiniciar(partida.recargarJugadoresPartida());
         }
     }
 }

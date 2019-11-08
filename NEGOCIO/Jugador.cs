@@ -151,6 +151,22 @@ namespace NEGOCIO
             return acceso.Escribir("ACTUALIZAR_PARTIDAS_GANADAS", parametros);
         }
 
+        public int ActualizarPartidasEmpatadas()
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@idJugador", this.id));
+
+            return acceso.Escribir("ACTUALIZAR_PARTIDAS_EMPATADAS", parametros);
+        }
+
+        public int ActualizarPartidasPerdidas()
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@idJugador", this.id));
+
+            return acceso.Escribir("ACTUALIZAR_PARTIDAS_PERDIDAS", parametros);
+        }
+
         public bool ValidarUsuario()
         {
             List<SqlParameter> parametros = new List<SqlParameter>();
@@ -170,6 +186,7 @@ namespace NEGOCIO
             if(tabla.Rows.Count > 0)
             {
                 DataRow registro = tabla.Rows[0];
+                this.id = int.Parse(registro["idJugador"].ToString());
                 this.nombre = registro["nombre"].ToString();
                 this.apellido = registro["apellido"].ToString();
 
