@@ -73,6 +73,22 @@ namespace ACCESOADATOS
             return filas;
         }
 
+        public int ValidarPartida(string nombre, List<SqlParameter> parametros)
+        {
+            Abrir();
+            SqlCommand comando = CrearComando(nombre, parametros);
+            int idUltimo = 0;
+
+            try
+            {
+                idUltimo = int.Parse(comando.ExecuteScalar().ToString());
+            }
+            catch (Exception ex)
+            {  }
+            Cerrar();
+            return idUltimo + 1;
+        }
+
         public bool Validar(string nombre, List<SqlParameter> parametros)
         {
             Abrir();

@@ -13,6 +13,7 @@ namespace PRESENTACION
 {
     public partial class frmPartida : Form
     {
+        Bitacora bitacora = new Bitacora();
         public List<Jugador> jugadores;
         Form _principal;
         List<CU_CELDA> celdas = new List<CU_CELDA>();
@@ -31,6 +32,9 @@ namespace PRESENTACION
         private void Button1_Click(object sender, EventArgs e)
         {
             this.Hide();
+            bitacora.Escribir(partida, "FIN");
+            bitacora.Escribir(partida.Jugador1, "CIERRE DE SESION");
+            bitacora.Escribir(partida.Jugador2, "CIERRE DE SESION");
             _principal.Show();
             
         }
@@ -55,6 +59,7 @@ namespace PRESENTACION
             partida = null;
             tablero = null;
             partida = new Partida();
+            bitacora.Escribir(partida, "INICIO");
             tablero = new Tablero();
             tablero.Partida = partida;
 
@@ -276,6 +281,7 @@ namespace PRESENTACION
                 Pieza piezaAMover = celdaOrigen.Celda.Pieza;
                 Celda celdaActual = tablero.getCelda(piezaAMover);
                 jugadorActivo.Mover(piezaAMover, tablero, celdaActual, celdaDestino.Celda);
+                bitacora.Escribir(partida, jugadorActivo, piezaAMover, celdaDestino.Celda);
                 LimpiarCeldasDisponibles();
                 if (jugadorActivo.PiezasCoronacion.Count > 0)
                 {
@@ -333,6 +339,7 @@ namespace PRESENTACION
 
             tablero.IntercambiarPieza(CU_corona.PiezaCorona, tablero.getCelda(CU_corona.Pieza), CU_corona.Jugador);
             Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
+            bitacora.Escribir(partida, jugadorActivo, CU_corona.PiezaCorona, tablero.getCelda(CU_corona.Pieza));
             jugadorActivo.PiezasCoronacion.Clear();
             ActualizarTablero();
             partida.AsignarTurno();
@@ -398,7 +405,7 @@ namespace PRESENTACION
             panel1.Controls.Clear();
             celdas.Clear();
             coronas.Clear();
-            
+            bitacora.Escribir(partida, "FIN");
             this.Reiniciar(partida.recargarJugadoresPartida());
         }
 
@@ -432,6 +439,8 @@ namespace PRESENTACION
             cU_TURNO2.PedirTablas.Visible = false;
             cU_TURNO2.AceptarTablas.Visible = false;
             cU_TURNO2.RechazarTablas.Visible = false;
+
+            bitacora.Escribir(partida, "FIN");
 
         }
     }

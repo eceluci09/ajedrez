@@ -10,7 +10,21 @@ namespace NEGOCIO
 {
     public class Partida
     {
+        public Partida()
+        {
+            this.AsignarId();
+
+        }
         Acceso acceso = new Acceso();
+
+        private int id;
+
+        public int Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
 
         private List<Turno> turnos = new List<Turno>();
 
@@ -218,6 +232,11 @@ namespace NEGOCIO
 
             return acceso.Escribir("CREAR_PARTIDA", parametros);
                                  
+        }
+
+        public void AsignarId()
+        {
+            id = acceso.ValidarPartida("LEER_ULT_PARTIDA", null);
         }
     }
 }

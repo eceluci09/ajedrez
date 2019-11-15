@@ -13,6 +13,7 @@ namespace PRESENTACION
 {
     public partial class frmPrincipal : Form
     {
+        Bitacora bitacora = new Bitacora();
         List<Jugador> jugadoresLogueados = new List<Jugador>();
 
         public frmPrincipal()
@@ -65,11 +66,14 @@ namespace PRESENTACION
 
         private void AñadirJugador(Jugador jugador)
         {
+            
+            bitacora.Escribir(jugador, "INICIO SESION");
             jugadoresLogueados.Add(jugador);
         }
 
         private void RemoverJugador(Jugador jugador)
         {
+            bitacora.Escribir(jugador, "CIERRE DE SESION");
             jugadoresLogueados.Remove(jugador);
         }
 

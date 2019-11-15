@@ -174,7 +174,7 @@ namespace NEGOCIO
         {
             if (celda == null) return false;
 
-            return (celda.Pieza == null || (celda.Pieza.Color == color || celda.Pieza.Color != color));
+            return (celda.Pieza == null);
         }
 
         public Celda getCelda(Pieza pieza)
