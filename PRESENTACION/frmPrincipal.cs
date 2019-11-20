@@ -86,5 +86,11 @@ namespace PRESENTACION
             }
             return logueado;
         }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            frmBitacora frmBitacora = new frmBitacora();
+            frmBitacora.ShowDialog();
+        }
     }
 }

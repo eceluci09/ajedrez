@@ -29,6 +29,84 @@ namespace PRESENTACION
 
 
         XmlDocument xml = new XmlDocument();
+
+        public XmlNode Load()
+        {
+            xml.Load(PATH_BITACORA);
+            return xml.DocumentElement;
+        }
+
+        public XmlNode LoadIF()
+        {
+            xml.Load(PATH_BITACORA2);
+            return xml.DocumentElement;
+        }
+        public XmlNode LoadM()
+        {
+            xml.Load(PATH_MOVIMIENTOS);
+            return xml.DocumentElement;
+        }
+
+        public XmlNode MostrarPrimero(XmlNode nodoActual)
+        {
+            if (nodoActual.HasChildNodes)
+            {
+                return nodoActual.FirstChild;
+            }
+            return nodoActual;
+        }
+
+        public XmlNode MostrarUltimo(XmlNode nodoActual)
+        {
+            if (nodoActual.HasChildNodes)
+            {
+                return nodoActual.LastChild;
+            }
+            return nodoActual;
+        }
+
+        public XmlNode MostrarSiguiente(XmlNode nodoActual)
+        {
+            try
+            {
+                if(nodoActual.NextSibling != null)
+                {
+                    return nodoActual.NextSibling;
+                }
+            }
+            catch
+            { }
+            return nodoActual;
+        }
+
+        public XmlNode MostrarAnterior(XmlNode nodoActual)
+        {
+            try
+            {
+                if (nodoActual.PreviousSibling != null)
+                {
+                    return nodoActual.PreviousSibling;
+                }
+            }
+            catch
+            { }
+            return nodoActual;
+        }
+
+        public XmlNode MostrarPadre(XmlNode nodoActual)
+        {
+            try
+            {
+                if(nodoActual.ParentNode != null)
+                {
+                    return nodoActual.ParentNode;
+                }
+               
+            }
+            catch
+            { }
+            return nodoActual;
+        }
         public DataSet Leer()
         {
             DataSet ds = new DataSet();
@@ -93,7 +171,7 @@ namespace PRESENTACION
             ds.WriteXmlSchema(PATH_MOVIMIENTOS_ESQUEMA);
         }
 
-        private DataSet LeerM()
+        public DataSet LeerM()
         {
             DataSet ds = new DataSet();
             if (!File.Exists(PATH_MOVIMIENTOS))
@@ -133,7 +211,7 @@ namespace PRESENTACION
             ds.WriteXmlSchema(PATH_BITACORA_ESQUEMA2);
         }
 
-        private DataSet LeerIF()
+        public DataSet LeerIF()
         {
             DataSet ds = new DataSet();
             if (!File.Exists(PATH_MOVIMIENTOS))

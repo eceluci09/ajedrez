@@ -77,6 +77,12 @@
     <Compile Include="CU_TURNO.Designer.cs">
       <DependentUpon>CU_TURNO.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmBitacora.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmBitacora.Designer.cs">
+      <DependentUpon>frmBitacora.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPartida.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +117,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="CU_TURNO.resx">
       <DependentUpon>CU_TURNO.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmBitacora.resx">
+      <DependentUpon>frmBitacora.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPartida.resx">
       <DependentUpon>frmPartida.cs</DependentUpon>
