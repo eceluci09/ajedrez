@@ -28,25 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnSalir = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblMensaje = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btnReiniciar = new System.Windows.Forms.Button();
+            this.btnAbandonar = new System.Windows.Forms.Button();
             this.cU_TURNO2 = new PRESENTACION.CU_TURNO();
             this.cU_TURNO1 = new PRESENTACION.CU_TURNO();
-            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button1
+            // btnSalir
             // 
-            this.button1.Location = new System.Drawing.Point(664, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(113, 37);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "SALIR";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.btnSalir.Location = new System.Drawing.Point(664, 12);
+            this.btnSalir.Name = "btnSalir";
+            this.btnSalir.Size = new System.Drawing.Size(113, 37);
+            this.btnSalir.TabIndex = 0;
+            this.btnSalir.Text = "SALIR";
+            this.btnSalir.UseVisualStyleBackColor = true;
+            this.btnSalir.Visible = false;
+            this.btnSalir.Click += new System.EventHandler(this.Button1_Click);
             // 
             // panel1
             // 
@@ -85,6 +86,16 @@
             this.btnReiniciar.Visible = false;
             this.btnReiniciar.Click += new System.EventHandler(this.BtnReiniciar_Click);
             // 
+            // btnAbandonar
+            // 
+            this.btnAbandonar.Location = new System.Drawing.Point(800, 416);
+            this.btnAbandonar.Name = "btnAbandonar";
+            this.btnAbandonar.Size = new System.Drawing.Size(118, 40);
+            this.btnAbandonar.TabIndex = 9;
+            this.btnAbandonar.Text = "ABANDONAR";
+            this.btnAbandonar.UseVisualStyleBackColor = true;
+            this.btnAbandonar.Click += new System.EventHandler(this.Button2_Click);
+            // 
             // cU_TURNO2
             // 
             this.cU_TURNO2.BackColor = System.Drawing.Color.Gray;
@@ -103,30 +114,20 @@
             this.cU_TURNO1.TabIndex = 7;
             this.cU_TURNO1.Usuario = "label2";
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(800, 416);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(118, 40);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "ABANDONAR";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.Button2_Click);
-            // 
             // frmPartida
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(1006, 623);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnAbandonar);
             this.Controls.Add(this.cU_TURNO2);
             this.Controls.Add(this.cU_TURNO1);
             this.Controls.Add(this.btnReiniciar);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.lblMensaje);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnSalir);
             this.Name = "frmPartida";
             this.Text = "frmPartida";
             this.Load += new System.EventHandler(this.FrmPartida_Load);
@@ -137,13 +138,13 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnSalir;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblMensaje;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button btnReiniciar;
         private CU_TURNO cU_TURNO1;
         private CU_TURNO cU_TURNO2;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnAbandonar;
     }
 }

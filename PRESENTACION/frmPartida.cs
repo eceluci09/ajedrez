@@ -24,6 +24,7 @@ namespace PRESENTACION
             this._principal = principal;
             this.jugadores = jugadores;
             InitializeComponent();
+            this.ControlBox = false;
         }
         Partida partida;
         Tablero tablero;
@@ -113,6 +114,8 @@ namespace PRESENTACION
             lblMensaje.Text = string.Empty;
 
             btnReiniciar.Visible = false;
+            btnSalir.Visible = false;
+            btnAbandonar.Visible = true;
         }
 
         private void RechazarTablas_Click(object sender, EventArgs e)
@@ -120,7 +123,7 @@ namespace PRESENTACION
             cU_TURNO1.AceptarTablas.Visible = false;
             cU_TURNO1.RechazarTablas.Visible = false;
             cU_TURNO2.PedirTablas.Visible = false;
-            button2.Visible = false;
+            btnAbandonar.Visible = false;
         }
 
         private void AceptarTablas_Click(object sender, EventArgs e)
@@ -134,7 +137,8 @@ namespace PRESENTACION
             partida.Jugador2.ActualizarPartidasEmpatadas();
             lblMensaje.Text = "PARTIDA EMPATADA POR TABLAS";
             btnReiniciar.Visible = true;
-            button2.Visible = false;
+            btnSalir.Visible = true;
+            btnAbandonar.Visible = false;
 
         }
 
@@ -143,7 +147,7 @@ namespace PRESENTACION
             partida.Jugador1.OfrecerTablas();
             cU_TURNO2.AceptarTablas.Visible = true;
             cU_TURNO2.RechazarTablas.Visible = true;
-            button2.Visible = false;
+            btnAbandonar.Visible = false;
         }
 
         private void RechazarTablas_Click1(object sender, EventArgs e)
@@ -151,7 +155,7 @@ namespace PRESENTACION
             cU_TURNO2.AceptarTablas.Visible = false;
             cU_TURNO2.RechazarTablas.Visible = false;
             cU_TURNO1.PedirTablas.Visible = false;
-            button2.Visible = false;
+            btnAbandonar.Visible = false;
         }
 
         private void AceptarTablas_Click1(object sender, EventArgs e)
@@ -165,7 +169,8 @@ namespace PRESENTACION
             partida.Jugador2.ActualizarPartidasEmpatadas();
             lblMensaje.Text = "PARTIDA EMPATADA POR TABLAS";
             btnReiniciar.Visible = true;
-            button2.Visible = false;
+            btnSalir.Visible = true;
+            btnAbandonar.Visible = false;
         }
 
         private void PedirTablas_Click1(object sender, EventArgs e)
@@ -173,7 +178,7 @@ namespace PRESENTACION
             partida.Jugador2.OfrecerTablas();
             cU_TURNO1.AceptarTablas.Visible = true;
             cU_TURNO1.RechazarTablas.Visible = true;
-            button2.Visible = false;
+            btnAbandonar.Visible = false;
         }
 
         private void MarcarJugadorTurnoActivo()
@@ -319,6 +324,7 @@ namespace PRESENTACION
                         }
                         
                         btnReiniciar.Visible = true;
+                        btnSalir.Visible = true;
                     }
                 }
 
@@ -339,7 +345,7 @@ namespace PRESENTACION
 
             tablero.IntercambiarPieza(CU_corona.PiezaCorona, tablero.getCelda(CU_corona.Pieza), CU_corona.Jugador);
             Jugador jugadorActivo = partida.VerificarJugadorTurnoActual();
-            bitacora.Escribir(partida, jugadorActivo, CU_corona.PiezaCorona, tablero.getCelda(CU_corona.Pieza));
+            bitacora.Escribir(partida, jugadorActivo, CU_corona.PiezaCorona, tablero.getCelda(CU_corona.PiezaCorona));
             jugadorActivo.PiezasCoronacion.Clear();
             ActualizarTablero();
             partida.AsignarTurno();
@@ -427,10 +433,13 @@ namespace PRESENTACION
                 partida.Jugador2.ActualizarPartidasPerdidas();
             }
 
+            partida.Alta();
+
             partida.Ganador.ActualizarPartidasGanadas();
 
             btnReiniciar.Visible = true;
-            button2.Visible = false;
+            btnSalir.Visible = true;
+            btnAbandonar.Visible = false;
 
             cU_TURNO1.PedirTablas.Visible = false;
             cU_TURNO1.AceptarTablas.Visible = false;
@@ -439,8 +448,6 @@ namespace PRESENTACION
             cU_TURNO2.PedirTablas.Visible = false;
             cU_TURNO2.AceptarTablas.Visible = false;
             cU_TURNO2.RechazarTablas.Visible = false;
-
-            bitacora.Escribir(partida, "FIN");
 
         }
     }

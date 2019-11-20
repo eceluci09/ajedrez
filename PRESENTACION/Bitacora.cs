@@ -83,7 +83,7 @@ namespace PRESENTACION
 
             registro["partida"] = partida.Id;
             registro["jugador"] = jugador.Credencial.Username;
-            registro["pieza"] = pieza.GetType().Name.ToString() + pieza.Color.Name;
+            registro["pieza"] = pieza.GetType().Name.ToString() + " " + pieza.Color.Name;
             registro["celda"] = "Fila: " + celda.Fila.ToString() + " Columna: " + celda.Columna.ToString();
             registro["fecha"] = DateTime.Now;
 
