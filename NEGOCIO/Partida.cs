@@ -84,6 +84,15 @@ namespace NEGOCIO
             set { tablas = value; }
         }
 
+        private DateTime inicio;
+
+        public DateTime Inicio
+        {
+            get { return inicio; }
+            set { inicio = value; }
+        }
+
+
         public void Iniciar(List<Jugador> jugadores)
         {
             jugador1 = jugadores[0];

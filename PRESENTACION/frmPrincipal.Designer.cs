@@ -34,6 +34,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.cU_LOGIN2 = new PRESENTACION.CU_LOGIN();
             this.cU_LOGIN1 = new PRESENTACION.CU_LOGIN();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -64,6 +65,7 @@
             this.button3.TabIndex = 4;
             this.button3.Text = "ESTADISTICAS";
             this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.Button3_Click);
             // 
             // button4
             // 
@@ -78,7 +80,7 @@
             // cU_LOGIN2
             // 
             this.cU_LOGIN2.Contraseña = "";
-            this.cU_LOGIN2.Location = new System.Drawing.Point(238, 178);
+            this.cU_LOGIN2.Location = new System.Drawing.Point(236, 239);
             this.cU_LOGIN2.Name = "cU_LOGIN2";
             this.cU_LOGIN2.Size = new System.Drawing.Size(311, 114);
             this.cU_LOGIN2.TabIndex = 2;
@@ -87,17 +89,29 @@
             // cU_LOGIN1
             // 
             this.cU_LOGIN1.Contraseña = "";
-            this.cU_LOGIN1.Location = new System.Drawing.Point(238, 58);
+            this.cU_LOGIN1.Location = new System.Drawing.Point(236, 119);
             this.cU_LOGIN1.Name = "cU_LOGIN1";
             this.cU_LOGIN1.Size = new System.Drawing.Size(311, 114);
             this.cU_LOGIN1.TabIndex = 1;
             this.cU_LOGIN1.Usuario = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(285, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(146, 31);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "AJEDREZ";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -108,6 +122,7 @@
             this.Text = "AJEDREZ";
             this.Load += new System.EventHandler(this.FrmPrincipal_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -119,6 +134,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Label label1;
     }
 }
 

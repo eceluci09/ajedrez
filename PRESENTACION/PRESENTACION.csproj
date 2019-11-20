@@ -83,6 +83,12 @@
     <Compile Include="frmBitacora.Designer.cs">
       <DependentUpon>frmBitacora.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmEstadisticas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEstadisticas.Designer.cs">
+      <DependentUpon>frmEstadisticas.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmPartida.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmBitacora.resx">
       <DependentUpon>frmBitacora.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEstadisticas.resx">
+      <DependentUpon>frmEstadisticas.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPartida.resx">
       <DependentUpon>frmPartida.cs</DependentUpon>
@@ -182,6 +191,7 @@
     <Content Include="Resources\peon_white.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\portada.png" />
     <Content Include="Resources\reina_black.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

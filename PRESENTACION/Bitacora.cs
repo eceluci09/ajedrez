@@ -136,39 +136,44 @@ namespace PRESENTACION
 
         public void Escribir(Jugador jugador, string tipo)
         {
+            if (jugador != null && tipo != string.Empty)
+            {
+                DataSet ds = Leer();
 
-            DataSet ds = Leer();
+                DataRow registro = ds.Tables[0].NewRow();
 
-            DataRow registro = ds.Tables[0].NewRow();
+                registro["nombre"] = jugador.Nombre;
+                registro["apellido"] = jugador.Apellido;
+                registro["usuario"] = jugador.Credencial.Username;
+                registro["tipo"] = tipo;
+                registro["fecha"] = DateTime.Now;
 
-            registro["nombre"] = jugador.Nombre;
-            registro["apellido"] = jugador.Apellido;
-            registro["usuario"] = jugador.Credencial.Username;
-            registro["tipo"] = tipo;
-            registro["fecha"] = DateTime.Now;
+                ds.Tables[0].Rows.Add(registro);
 
-            ds.Tables[0].Rows.Add(registro);
-
-            ds.WriteXml(PATH_BITACORA);
-            ds.WriteXmlSchema(PATH_BITACORA_ESQUEMA);
+                ds.WriteXml(PATH_BITACORA);
+                ds.WriteXmlSchema(PATH_BITACORA_ESQUEMA);
+            }
         }
 
         public void Escribir(Partida partida, Jugador jugador, Pieza pieza, Celda celda)
         {
-            DataSet ds = LeerM();
+            if (partida != null && jugador != null && pieza != null && celda != null)
+            {
+                DataSet ds = LeerM();
 
-            DataRow registro = ds.Tables[0].NewRow();
+                DataRow registro = ds.Tables[0].NewRow();
 
-            registro["partida"] = partida.Id;
-            registro["jugador"] = jugador.Credencial.Username;
-            registro["pieza"] = pieza.GetType().Name.ToString() + " " + pieza.Color.Name;
-            registro["celda"] = "Fila: " + celda.Fila.ToString() + " Columna: " + celda.Columna.ToString();
-            registro["fecha"] = DateTime.Now;
+                registro["partida"] = partida.Id;
+                registro["jugador"] = jugador.Credencial.Username;
+                registro["pieza"] = pieza.GetType().Name.ToString() + " " + pieza.Color.Name;
+                registro["celda"] = "Fila: " + celda.Fila.ToString() + " Columna: " + celda.Columna.ToString();
+                registro["fecha"] = DateTime.Now;
 
-            ds.Tables[0].Rows.Add(registro);
+                ds.Tables[0].Rows.Add(registro);
 
-            ds.WriteXml(PATH_MOVIMIENTOS);
-            ds.WriteXmlSchema(PATH_MOVIMIENTOS_ESQUEMA);
+                ds.WriteXml(PATH_MOVIMIENTOS);
+                ds.WriteXmlSchema(PATH_MOVIMIENTOS_ESQUEMA);
+            }
         }
 
         public DataSet LeerM()
@@ -197,18 +202,21 @@ namespace PRESENTACION
 
         public void Escribir(Partida partida, string tipo)
         {
-            DataSet ds = LeerIF();
+            if (partida != null && tipo != string.Empty)
+            {
+                DataSet ds = LeerIF();
 
-            DataRow registro = ds.Tables[0].NewRow();
+                DataRow registro = ds.Tables[0].NewRow();
 
-            registro["partida"] = partida.Id;
-            registro["tipo"] = tipo;
-            registro["fecha"] = DateTime.Now;
+                registro["partida"] = partida.Id;
+                registro["tipo"] = tipo;
+                registro["fecha"] = DateTime.Now;
 
-            ds.Tables[0].Rows.Add(registro);
+                ds.Tables[0].Rows.Add(registro);
 
-            ds.WriteXml(PATH_BITACORA2);
-            ds.WriteXmlSchema(PATH_BITACORA_ESQUEMA2);
+                ds.WriteXml(PATH_BITACORA2);
+                ds.WriteXmlSchema(PATH_BITACORA_ESQUEMA2);
+            }
         }
 
         public DataSet LeerIF()

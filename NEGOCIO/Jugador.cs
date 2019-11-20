@@ -60,6 +60,42 @@ namespace NEGOCIO
             set { turno = value; }
         }
 
+        private int partidasGanadas;
+
+        public int PartidasGanadas
+        {
+            get { return partidasGanadas; }
+            set { partidasGanadas = value; }
+        }
+
+        private int partidasEmpatadas;
+
+        public int PartidasEmpatadas
+        {
+            get { return partidasEmpatadas; }
+            set { partidasEmpatadas = value; }
+        }
+
+        private int partidasPerdidas;
+
+        public int PartidasPerdidas
+        {
+            get { return partidasPerdidas; }
+            set { partidasPerdidas = value; }
+        }
+
+        private int tiempoJugado;
+
+        public int TiempoJugado
+        {
+            get { return tiempoJugado; }
+            set { tiempoJugado = value; }
+        }
+
+
+
+
+
 
         private List<Partida> partidasJugadas = new List<Partida>();
 
@@ -143,6 +179,14 @@ namespace NEGOCIO
             return acceso.Escribir("CREAR_JUGADOR", parametros);
         }
 
+        public int ActualizarTiempoJuego(int tiempoJugado)
+        {
+            List<SqlParameter> parametros = new List<SqlParameter>();
+            parametros.Add(acceso.CrearParametro("@idJugador", this.id));
+            parametros.Add(acceso.CrearParametro("@tiempo", tiempoJugado));
+
+            return acceso.Escribir("ACTUALIZAR_TIEMPO_JUEGO", parametros);
+        }
         public int ActualizarPartidasGanadas()
         {
             List<SqlParameter> parametros = new List<SqlParameter>();
@@ -194,6 +238,34 @@ namespace NEGOCIO
             }
 
             return null;
+        }
+
+        public static List<Jugador> Listar()
+        {
+            Acceso acceso = new Acceso();
+            List<Jugador> jugadores = new List<Jugador>();
+            DataTable tabla = acceso.Leer("LEER_JUGADOR", null);
+
+            foreach(DataRow registro in tabla.Rows)
+            {
+                Jugador jugador = new Jugador();
+                jugador.id = int.Parse(registro["idJugador"].ToString());
+                jugador.nombre = registro["nombre"].ToString();
+                jugador.apellido = registro["apellido"].ToString();
+                jugador.partidasGanadas = int.Parse(registro["cantPartidasGanadas"].ToString());
+                jugador.partidasEmpatadas = int.Parse(registro["cantPartidasEmpatadas"].ToString());
+                jugador.partidasPerdidas = int.Parse(registro["cantPartidasPerdidas"].ToString());
+                jugador.tiempoJugado = int.Parse(registro["minutosJugados"].ToString());
+
+                jugadores.Add(jugador);
+            }
+
+            return jugadores;
+        }
+
+        public override string ToString()
+        {
+            return nombre.ToString() + " " + apellido.ToString();
         }
 
 

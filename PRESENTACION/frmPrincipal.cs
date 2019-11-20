@@ -92,5 +92,11 @@ namespace PRESENTACION
             frmBitacora frmBitacora = new frmBitacora();
             frmBitacora.ShowDialog();
         }
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            frmEstadisticas frmEstadisticas = new frmEstadisticas();
+            frmEstadisticas.ShowDialog();
+        }
     }
 }

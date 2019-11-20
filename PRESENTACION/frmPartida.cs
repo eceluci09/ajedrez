@@ -63,6 +63,7 @@ namespace PRESENTACION
             bitacora.Escribir(partida, "INICIO");
             tablero = new Tablero();
             tablero.Partida = partida;
+            partida.Inicio = DateTime.Now;
 
             foreach (Celda celda in tablero.Celdas)
             {
@@ -123,7 +124,7 @@ namespace PRESENTACION
             cU_TURNO1.AceptarTablas.Visible = false;
             cU_TURNO1.RechazarTablas.Visible = false;
             cU_TURNO2.PedirTablas.Visible = false;
-            btnAbandonar.Visible = false;
+            btnAbandonar.Visible = true;
         }
 
         private void AceptarTablas_Click(object sender, EventArgs e)
@@ -133,6 +134,7 @@ namespace PRESENTACION
             cU_TURNO1.RechazarTablas.Visible = false;
             cU_TURNO2.PedirTablas.Visible = false;
             partida.Alta();
+            ActualizarTiempoJugado();
             partida.Jugador1.ActualizarPartidasEmpatadas();
             partida.Jugador2.ActualizarPartidasEmpatadas();
             lblMensaje.Text = "PARTIDA EMPATADA POR TABLAS";
@@ -155,7 +157,7 @@ namespace PRESENTACION
             cU_TURNO2.AceptarTablas.Visible = false;
             cU_TURNO2.RechazarTablas.Visible = false;
             cU_TURNO1.PedirTablas.Visible = false;
-            btnAbandonar.Visible = false;
+            btnAbandonar.Visible = true;
         }
 
         private void AceptarTablas_Click1(object sender, EventArgs e)
@@ -165,6 +167,7 @@ namespace PRESENTACION
             cU_TURNO2.RechazarTablas.Visible = false;
             cU_TURNO1.PedirTablas.Visible = false;
             partida.Alta();
+            ActualizarTiempoJugado();
             partida.Jugador1.ActualizarPartidasEmpatadas();
             partida.Jugador2.ActualizarPartidasEmpatadas();
             lblMensaje.Text = "PARTIDA EMPATADA POR TABLAS";
@@ -314,6 +317,7 @@ namespace PRESENTACION
                     if(partida.Ganador != null || partida.Tablas)
                     {
                         partida.Alta();
+                        ActualizarTiempoJugado();
                         partida.Ganador.ActualizarPartidasGanadas();
                         if(partida.Ganador.Equals(partida.Jugador1))
                         {
@@ -437,6 +441,8 @@ namespace PRESENTACION
 
             partida.Ganador.ActualizarPartidasGanadas();
 
+            ActualizarTiempoJugado();
+
             btnReiniciar.Visible = true;
             btnSalir.Visible = true;
             btnAbandonar.Visible = false;
@@ -448,6 +454,16 @@ namespace PRESENTACION
             cU_TURNO2.PedirTablas.Visible = false;
             cU_TURNO2.AceptarTablas.Visible = false;
             cU_TURNO2.RechazarTablas.Visible = false;
+
+        }
+
+        private void ActualizarTiempoJugado()
+        {
+            TimeSpan minutosJugados = DateTime.Now - partida.Inicio;
+            int minutos = Convert.ToInt32(minutosJugados.TotalMinutes);
+
+            partida.Jugador1.ActualizarTiempoJuego(minutos);
+            partida.Jugador2.ActualizarTiempoJuego(minutos);
 
         }
     }
